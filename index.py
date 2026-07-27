@@ -1,6 +1,8 @@
 # from functools import reduce
 from ast import arg
+from collections.abc import Iterable
 from dataclasses import dataclass
+import os
 import typing
 import numpy as np
 
@@ -309,3 +311,163 @@ class User:
 
 user = User("king", 18, "king@example.com")
 print(user)
+
+print([123] == [123])
+
+print(reduce(lambda pre, curr: pre + curr, (range(1, 101)), 0))
+
+print(isinstance(user, (User)))
+
+
+def mul(*args: list[int]):
+    return reduce(lambda pre, curr: pre * curr, args)
+
+
+print("mul(5) =", mul(5))
+print("mul(5, 6) =", mul(5, 6))
+print("mul(5, 6, 7) =", mul(5, 6, 7))
+print("mul(5, 6, 7, 9) =", mul(5, 6, 7, 9))
+if mul(5) != 5:
+    print("mul(5)测试失败!")
+elif mul(5, 6) != 30:
+    print("mul(5, 6)测试失败!")
+elif mul(5, 6, 7) != 210:
+    print("mul(5, 6, 7)测试失败!")
+elif mul(5, 6, 7, 9) != 1890:
+    print("mul(5, 6, 7, 9)测试失败!")
+else:
+    try:
+        mul()
+        print("mul()测试失败!")
+    except TypeError:
+        print("测试成功!")
+
+
+for index, item in enumerate(range(10)):
+    print(index, item)
+
+
+def findMinAndMax(L: list[int | None]):
+    if len(L) == 0:
+        return (None, None)
+    if len(L) == 1:
+        return (L[0], L[0])
+    max = L[0]
+    min = L[0]
+    for i in L:
+        if i < min:
+            min = i
+        if i > max:
+            max = i
+    return (min, max)
+
+
+# 测试
+if findMinAndMax([]) != (None, None):
+    print("测试失败!", findMinAndMax([]))
+elif findMinAndMax([7]) != (7, 7):
+    print("测试失败!", findMinAndMax([7]))
+elif findMinAndMax([7, 1]) != (1, 7):
+    print("测试失败!", findMinAndMax([7, 1]))
+elif findMinAndMax([7, 1, 3, 9, 5]) != (1, 9):
+    print("测试失败!", findMinAndMax([7, 1, 3, 9, 5]))
+else:
+    print("测试成功!")
+
+print([d for d in os.listdir(".")])
+
+print([a + b + c for a in "abc" for b in "xyz" for c in "hel"])
+
+
+L1 = ["Hello", "World", 18, "Apple", None]
+L2 = [item.lower() for item in L1 if isinstance(item, str)]
+
+# 可迭代
+print(isinstance(L2, Iterable))
+
+# 测试:
+print(L2)
+if L2 == ["hello", "world", "apple"]:
+    print("测试通过!")
+else:
+    print("测试失败!")
+
+L3 = (item.lower() for item in L1 if isinstance(item, str))
+
+print(L3)
+for item in L3:
+    print(item)
+
+
+def fib(max):
+    index, pre, current = 0, 0, 1
+    while index < max:
+        yield current
+        pre, current = current, pre + current
+        index += 1
+
+
+for r in fib(10):
+    print(r)
+
+
+def triangles():
+    col = 1
+    curr = [1]
+    yield curr
+    while True:
+        col += 1
+        curr = [
+            (0 if num == 0 else curr[num - 1]) + (0 if num >= len(curr) else curr[num])
+            for num in range(0, col)
+        ]
+        yield curr
+
+
+def triangles():
+    L = [1]
+    while True:
+        yield L
+        L = [1] + [L[i] + L[i + 1] for i in range(len(L) - 1)] + [1]
+
+
+# 期待输出:
+# [1]
+# [1, 1]
+# [1, 2, 1]
+# [1, 3, 3, 1]
+# [1, 4, 6, 4, 1]
+# [1, 5, 10, 10, 5, 1]
+# [1, 6, 15, 20, 15, 6, 1]
+# [1, 7, 21, 35, 35, 21, 7, 1]
+# [1, 8, 28, 56, 70, 56, 28, 8, 1]
+# [1, 9, 36, 84, 126, 126, 84, 36, 9, 1]
+n = 0
+results = []
+for t in triangles():
+    results.append(t)
+    n = n + 1
+    if n == 10:
+        break
+
+for t in results:
+    print(t)
+
+if results == [
+    [1],
+    [1, 1],
+    [1, 2, 1],
+    [1, 3, 3, 1],
+    [1, 4, 6, 4, 1],
+    [1, 5, 10, 10, 5, 1],
+    [1, 6, 15, 20, 15, 6, 1],
+    [1, 7, 21, 35, 35, 21, 7, 1],
+    [1, 8, 28, 56, 70, 56, 28, 8, 1],
+    [1, 9, 36, 84, 126, 126, 84, 36, 9, 1],
+]:
+    print("测试通过!")
+else:
+    print("测试失败!")
+
+print([1, 2, 3])
+print(iter([1, 2, 3]))
