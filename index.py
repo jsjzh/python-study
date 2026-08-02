@@ -6,6 +6,9 @@ import os
 import typing
 import numpy as np
 
+import my_module
+from my_module.hello import my_module_hello
+
 # multi_line_string = """
 
 # hello rowld
@@ -471,3 +474,150 @@ else:
 
 print([1, 2, 3])
 print(iter([1, 2, 3]))
+print(1.1 == 1.1)
+
+
+# print(
+#     list(
+#         filter(
+#             lambda index, item: (index + item) % 2 != 1,
+#             enumerate([1, 2, 4, 5, 6, 9, 10, 15]),
+#         )
+#     )
+# )
+
+print([index + item for index, item in enumerate([1, 2, 4, 5, 6, 9, 10, 15])])
+
+
+L = [("Bob", 75), ("Adam", 92), ("Bart", 66), ("Lisa", 88)]
+
+
+def by_name(t: tuple[str, int]):
+    return t[1]
+
+
+L2 = sorted(L, key=by_name, reverse=True)
+print(L2)
+
+
+def inc():
+    x = 0
+
+    def fn():
+        nonlocal x
+        x = x + 1
+        return x
+
+    return fn
+
+
+f = inc()
+print(f())  # 1
+print(f())  # 2
+
+
+def createCounter():
+    x = 0
+
+    def counter():
+        nonlocal x
+        x += 1
+        return x
+
+    return counter
+
+
+# 测试:
+counterA = createCounter()
+print(counterA(), counterA(), counterA(), counterA(), counterA())  # 1 2 3 4 5
+counterB = createCounter()
+if [counterB(), counterB(), counterB(), counterB()] == [1, 2, 3, 4]:
+    print("测试通过!")
+else:
+    print("测试失败!")
+
+
+import time, functools
+
+
+def metric(fn):
+    print("%s executed in %s ms" % (fn.__name__, 10.24))
+
+    @functools.wraps(fn)
+    def wrapper(*args, **kw):
+        return fn(*args, **kw)
+
+    return wrapper
+
+
+# 测试
+@metric
+def fast(x, y):
+    time.sleep(0.0012)
+    return x + y
+
+
+@metric
+def slow(x, y, z):
+    time.sleep(0.1234)
+    return x * y * z
+
+
+f = fast(11, 22)
+s = slow(11, 22, 33)
+if f != 33:
+    print("测试失败!")
+elif s != 7986:
+    print("测试失败!")
+
+
+def log(obj):
+    if callable(obj):
+
+        @functools.wraps(obj)
+        def wrapper(*args, **kw):
+            print("start", __name__)
+            return obj(*args, **kw)
+
+        return wrapper
+
+    else:
+
+        def dec(fun):
+            @functools.wraps(fun)
+            def wrapper(*args, **kw):
+                print("start", __name__)
+                return fun(*args, **kw)
+
+            return wrapper
+
+        return dec
+
+
+@log
+def f():
+    pass
+
+
+@log("text")
+def b():
+    pass
+
+
+f()
+b()
+
+
+print(
+    functools.partial(max, 10)(
+        1,
+        2,
+        3,
+        4,
+        5,
+    )
+)
+
+my_module_hello()
+
+print(my_module.__doc__)
