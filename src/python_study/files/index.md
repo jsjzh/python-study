@@ -1,5 +1,1 @@
-
-hello world
-hello world
-hello world
-hello world
+{"name": "\u91d1", "age": 18}
