@@ -1,9 +1,9 @@
 from python_study.modules import (
-    collectionsDemo,
-    dateTimeDemo,
+    serializeDemo,
     processDemo,
     regDemo,
-    serializeDemo,
+    dateTimeDemo,
+    collectionsDemo,
 )
 
 
