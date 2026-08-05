@@ -1,4 +1,5 @@
 import hashlib
+import hmac
 
 sb = b"a"
 
@@ -29,4 +30,8 @@ def main():
     print(
         "----- hashlib.shake_256(sb).hexdigest() -----",
         hashlib.shake_256(sb).hexdigest(length=10),
+    )
+    print(
+        '----- hmac.new(b"new", sb,digestmod="MD5").hexdigest() -----',
+        hmac.new(b"new", sb, digestmod="MD5").hexdigest(),
     )
