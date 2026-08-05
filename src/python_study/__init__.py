@@ -1,9 +1,10 @@
 from python_study.modules import (
-    serializeDemo,
-    processDemo,
-    regDemo,
-    dateTimeDemo,
+    base64Demo,
     collectionsDemo,
+    dateTimeDemo,
+    regDemo,
+    processDemo,
+    serializeDemo,
 )
 
 
@@ -13,4 +14,5 @@ def main() -> None:
     # regDemo.main()
     # dateTimeDemo.main()
     # collectionsDemo.main()
+    base64Demo.main()
     pass
