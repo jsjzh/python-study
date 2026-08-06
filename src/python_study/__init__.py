@@ -15,6 +15,7 @@ from python_study.thirdModuleDemos import (
     pillowDemo,
     psutilDemo,
     requestsDemo,
+    sqlite3Demo,
 )
 
 
@@ -34,4 +35,5 @@ def main() -> None:
     # requestsDemo.main()
     # chardetDemo.main()
     # psutilDemo.main()
+    sqlite3Demo.main()
     pass
