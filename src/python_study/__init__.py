@@ -1,3 +1,4 @@
+from python_study.LLMDemos import SSE
 from python_study.bulitModuleDemos import (
     asyncioDemo,
     base64Demo,
@@ -31,11 +32,13 @@ def main() -> None:
     # itertoolsDemo.main()
     # contextlibDemo.main()
     # urllibDemo.main()
-    asyncioDemo.main()
+    # asyncioDemo.main()
 
     # pillowDemo.main()
     # requestsDemo.main()
     # chardetDemo.main()
     # psutilDemo.main()
     # sqlite3Demo.main()
+
+    SSE.main()
     pass

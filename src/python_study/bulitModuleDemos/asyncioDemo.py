@@ -29,7 +29,7 @@ async def requestList():
     return await asyncio.gather(*tasks)
 
 
-async def aiohttpFetch(client, id):
+async def aiohttpFetch(client: aiohttp.ClientSession, id):
     print("----- aiohttpFetch start id -----", id)
     async with client.get(getUrl(id)) as rep:
         return await rep.json()
