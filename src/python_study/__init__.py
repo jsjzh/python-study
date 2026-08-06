@@ -1,4 +1,4 @@
-from python_study.LLMDemos import SSE
+from python_study.LLMDemos import SSEDemo, qwenDemo
 from python_study.bulitModuleDemos import (
     asyncioDemo,
     base64Demo,
@@ -40,5 +40,6 @@ def main() -> None:
     # psutilDemo.main()
     # sqlite3Demo.main()
 
-    SSE.main()
+    # SSEDemo.main()
+    # qwenDemo.main()
     pass
