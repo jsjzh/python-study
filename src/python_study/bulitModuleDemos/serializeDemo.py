@@ -1,36 +1,30 @@
 import json
-from os import path
-import os
 import pickle
 
-base = path.join(os.getcwd(), "src", "python_study")
-
-
-def _getProjectPath(paths: list[str]) -> str:
-    return path.join(base, *paths)
+from python_study.utils import getAssetsPath
 
 
 def writeFileWithStr(s: str):
-    filePath = _getProjectPath(paths=["files", "index.md"])
+    filePath = getAssetsPath(paths=["index.md"])
     with open(filePath, "a+") as f:
-        f.write(f"\n{s}")
+        f.write(f"{s}\n")
 
 
 def serialize():
     d = {"name": "king", "age": 18}
-    filePath = _getProjectPath(paths=["files", "index.md"])
+    filePath = getAssetsPath(paths=["index.md"])
     with open(filePath, "ab") as f:
         f.write(pickle.dumps(d))
 
 
 def readSerialize():
-    filePath = _getProjectPath(paths=["files", "index.md"])
+    filePath = getAssetsPath(paths=["index.md"])
     with open(filePath, "rb") as f:
         print("----- pickle.load(f) -----", pickle.load(f))
 
 
 def serializeJson():
-    filePath = _getProjectPath(paths=["files", "index.md"])
+    filePath = getAssetsPath(paths=["index.md"])
     d = dict(name="金", age=18)
     print("----- d -----", d)
     print("----- type(d) -----", type(d))
@@ -41,7 +35,7 @@ def serializeJson():
 
 
 def readSerializeJson():
-    filePath = _getProjectPath(paths=["files", "index.md"])
+    filePath = getAssetsPath(paths=["index.md"])
     with open(filePath, "r") as f:
         print("----- json.load(f) -----", json.load(f))
 

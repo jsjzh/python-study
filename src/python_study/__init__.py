@@ -10,6 +10,7 @@ from python_study.bulitModuleDemos import (
     serializeDemo,
     urllibDemo,
 )
+from python_study.thirdModuleDemos import pillowDemo
 
 
 def main() -> None:
@@ -23,4 +24,6 @@ def main() -> None:
     # itertoolsDemo.main()
     # contextlibDemo.main()
     # urllibDemo.main()
+
+    pillowDemo.main()
     pass
