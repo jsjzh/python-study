@@ -10,7 +10,12 @@ from python_study.bulitModuleDemos import (
     serializeDemo,
     urllibDemo,
 )
-from python_study.thirdModuleDemos import chardetDemo, pillowDemo, requestsDemo
+from python_study.thirdModuleDemos import (
+    chardetDemo,
+    pillowDemo,
+    psutilDemo,
+    requestsDemo,
+)
 
 
 def main() -> None:
@@ -27,5 +32,6 @@ def main() -> None:
 
     # pillowDemo.main()
     # requestsDemo.main()
-    chardetDemo.main()
+    # chardetDemo.main()
+    # psutilDemo.main()
     pass
