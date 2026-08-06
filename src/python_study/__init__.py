@@ -1,4 +1,4 @@
-from python_study.modules import (
+from python_study.bulitModuleDemos import (
     base64Demo,
     collectionsDemo,
     contextlibDemo,
@@ -22,5 +22,5 @@ def main() -> None:
     # hashDemo.main()
     # itertoolsDemo.main()
     # contextlibDemo.main()
-    urllibDemo.main()
+    # urllibDemo.main()
     pass
