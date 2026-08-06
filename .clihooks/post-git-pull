@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+const { execSync } = require('child_process');
+
+try {
+  execSync('uv sync', { stdio: 'inherit', cwd: __dirname + '/..' });
+} catch {
+  console.error('✖ uv sync failed');
+}
