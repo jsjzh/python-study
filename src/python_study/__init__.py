@@ -3,6 +3,7 @@ from python_study.modules import (
     collectionsDemo,
     dateTimeDemo,
     hashDemo,
+    itertoolsDemo,
     regDemo,
     processDemo,
     serializeDemo,
@@ -17,4 +18,5 @@ def main() -> None:
     # collectionsDemo.main()
     # base64Demo.main()
     # hashDemo.main()
+    itertoolsDemo.main()
     pass
