@@ -1,6 +1,7 @@
 from python_study.modules import (
     base64Demo,
     collectionsDemo,
+    contextlibDemo,
     dateTimeDemo,
     hashDemo,
     itertoolsDemo,
@@ -18,5 +19,6 @@ def main() -> None:
     # collectionsDemo.main()
     # base64Demo.main()
     # hashDemo.main()
-    itertoolsDemo.main()
+    # itertoolsDemo.main()
+    contextlibDemo.main()
     pass
