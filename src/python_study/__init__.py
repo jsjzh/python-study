@@ -8,6 +8,7 @@ from python_study.modules import (
     regDemo,
     processDemo,
     serializeDemo,
+    urllibDemo,
 )
 
 
@@ -20,5 +21,6 @@ def main() -> None:
     # base64Demo.main()
     # hashDemo.main()
     # itertoolsDemo.main()
-    contextlibDemo.main()
+    # contextlibDemo.main()
+    urllibDemo.main()
     pass
