@@ -1,4 +1,5 @@
 from python_study.bulitModuleDemos import (
+    asyncioDemo,
     base64Demo,
     collectionsDemo,
     contextlibDemo,
@@ -30,10 +31,11 @@ def main() -> None:
     # itertoolsDemo.main()
     # contextlibDemo.main()
     # urllibDemo.main()
+    asyncioDemo.main()
 
     # pillowDemo.main()
     # requestsDemo.main()
     # chardetDemo.main()
     # psutilDemo.main()
-    sqlite3Demo.main()
+    # sqlite3Demo.main()
     pass
