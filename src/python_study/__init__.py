@@ -1,5 +1,5 @@
-from python_study.LLMDemos import SSEDemo, qwenDemo
-from python_study.bulitModuleDemos import (
+from python_study.modules.LLMDemos import SSEDemo, qwenDemo
+from python_study.modules.bulitModuleDemos import (
     asyncioDemo,
     base64Demo,
     collectionsDemo,
@@ -12,7 +12,7 @@ from python_study.bulitModuleDemos import (
     serializeDemo,
     urllibDemo,
 )
-from python_study.thirdModuleDemos import (
+from python_study.modules.thirdModuleDemos import (
     chardetDemo,
     pillowDemo,
     psutilDemo,
