@@ -1,5 +1,6 @@
 from python_study.modules.LLMDemos import SSEDemo, qwenDemo
 from python_study.modules.bulitModuleDemos import (
+    asyncioAdvancedDemo,
     asyncioDemo,
     base64Demo,
     collectionsDemo,
@@ -33,6 +34,7 @@ def main() -> None:
     # contextlibDemo.main()
     # urllibDemo.main()
     # asyncioDemo.main()
+    asyncioAdvancedDemo.main()
 
     # pillowDemo.main()
     # requestsDemo.main()
