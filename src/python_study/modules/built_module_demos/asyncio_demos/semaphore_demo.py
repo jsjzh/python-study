@@ -7,14 +7,8 @@ asyncio.Semaphore 控制并发
 """
 
 import asyncio
-import time
 
-
-async def fake_fetch(index, sem):
-    async with sem:
-        print(f"start {index}", time.strftime("%H:%M:%S"))
-        await asyncio.sleep(1)
-        print(f"end {index}", time.strftime("%H:%M:%S"))
+from python_study.utils import fake_fetch
 
 
 async def re_start() -> None:
