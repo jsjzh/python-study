@@ -43,8 +43,8 @@ def get_assets_path(paths: list[str]) -> str:
 
 # Coroutine[Any, Any, None] 可以用 Awaitable[None] 替代
 def atimer(
-    afunc: Callable[..., Coroutine[Any, Any, None]],
-) -> Callable[..., Coroutine[Any, Any, None]]:
+    afunc: Callable[..., Coroutine[Any, Any, Any]],
+) -> Callable[..., Coroutine[Any, Any, Any]]:
 
     async def wrapper(*args: Any, **kwargs: Any) -> None:
         start_time = time.perf_counter()
@@ -57,8 +57,8 @@ def atimer(
 
 
 def timer(
-    fun: Callable[..., None],
-) -> Callable[..., None]:
+    fun: Callable[..., Any],
+) -> Callable[..., Any]:
 
     def wrapper(*args: Any, **kwargs: Any) -> None:
         start_time = time.perf_counter()
@@ -75,15 +75,21 @@ def timer(
 # 不传（None） → 拿到的是 nullcontext()，它的 __aenter__/__aexit__ 是空操作，等于没有锁，原样执行
 # nullcontext() 是标准库 contextlib 提供的"什么都不做的上下文管理器"，Python 3.10 起支持 async with，所以能直接这样用。这样写的好处就是代码体只写一遍，不用把下载逻辑复制两份
 async def fake_fetch(
-    index: int, sem: asyncio.Semaphore | None = None, fail: bool = False
+    index: int,
+    min: float = 0.5,
+    max: float = 2.0,
+    sem: asyncio.Semaphore | None = None,
+    fail: bool = False,
+    timeout: int | None = None,
 ) -> str | None:
     async with sem if sem is not None else nullcontext():
-        delay = random.uniform(0.5, 2.0)
-        print(f"[{index}] 🟢 开始下载 (delay={delay:.1f}s)")
-        await asyncio.sleep(delay)
+        async with asyncio.timeout(timeout) if timeout is not None else nullcontext():
+            delay = random.uniform(min, max)
+            print(f"[{index}] 🟢 开始下载 (delay={delay:.1f}s)")
+            await asyncio.sleep(delay)
 
-        if fail:
-            raise ValueError(f"errorIndex: {index} trigger")
+            if fail:
+                raise ValueError(f"errorIndex: {index} trigger")
 
-        print(f"[{index}] ✅ 下载完成")
-        return f"data_{index}"
+            print(f"[{index}] ✅ 下载完成")
+            return f"data_{index}"
