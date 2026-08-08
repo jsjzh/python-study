@@ -1,42 +1,42 @@
 import json
 import pickle
 
-from python_study.utils import getAssetsPath
+from python_study.utils import get_assets_path
 
 
-def writeFileWithStr(s: str):
-    filePath = getAssetsPath(paths=["index.md"])
-    with open(filePath, "a+") as f:
+def write_file_with_str(s: str):
+    file_path = get_assets_path(paths=["index.md"])
+    with open(file_path, "a+") as f:
         f.write(f"{s}\n")
 
 
 def serialize():
     d = {"name": "king", "age": 18}
-    filePath = getAssetsPath(paths=["index.md"])
-    with open(filePath, "ab") as f:
+    file_path = get_assets_path(paths=["index.md"])
+    with open(file_path, "ab") as f:
         f.write(pickle.dumps(d))
 
 
-def readSerialize():
-    filePath = getAssetsPath(paths=["index.md"])
-    with open(filePath, "rb") as f:
+def read_serialize():
+    file_path = get_assets_path(paths=["index.md"])
+    with open(file_path, "rb") as f:
         print("----- pickle.load(f) -----", pickle.load(f))
 
 
-def serializeJson():
-    filePath = getAssetsPath(paths=["index.md"])
+def serialize_json():
+    file_path = get_assets_path(paths=["index.md"])
     d = dict(name="金", age=18)
     print("----- d -----", d)
     print("----- type(d) -----", type(d))
     print("----- json.dumps(d) -----", json.dumps(d))
     print("----- type(json.dumps(d)) -----", type(json.dumps(d)))
-    with open(filePath, "w") as f:
+    with open(file_path, "w") as f:
         f.write(json.dumps(d, ensure_ascii=True))
 
 
-def readSerializeJson():
-    filePath = getAssetsPath(paths=["index.md"])
-    with open(filePath, "r") as f:
+def read_serialize_json():
+    file_path = get_assets_path(paths=["index.md"])
+    with open(file_path, "r") as f:
         print("----- json.load(f) -----", json.load(f))
 
 
@@ -46,7 +46,7 @@ class Student:
         self.age = age
 
 
-def serializeClass():
+def serialize_class():
     s = Student(name="king", age=18)
     print(
         "----- json.dumps(s, default=lambda obj: obj.__dict__) -----",
@@ -55,10 +55,10 @@ def serializeClass():
 
 
 def main():
-    writeFileWithStr("hello world")
+    write_file_with_str("hello world")
     # serialize()
-    # readSerialize()
-    # serializeJson()
-    # readSerializeJson()
-    # serializeClass()
+    # read_serialize()
+    # serialize_json()
+    # read_serialize_json()
+    # serialize_class()
     pass

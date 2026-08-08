@@ -1,5 +1,5 @@
 """
-python_study.modules.bulitModuleDemos.asyncioDemos.semaphoreDemo 的 Docstring
+python_study.modules.built_module_demos.asyncio_demos.semaphore_demo 的 Docstring
 
 asyncio.Semaphore 控制并发
 
@@ -10,18 +10,18 @@ import asyncio
 import time
 
 
-async def fakeFetch(index, sem):
+async def fake_fetch(index, sem):
     async with sem:
         print(f"start {index}", time.strftime("%H:%M:%S"))
         await asyncio.sleep(1)
         print(f"end {index}", time.strftime("%H:%M:%S"))
 
 
-async def reStart() -> None:
+async def re_start() -> None:
     sem = asyncio.Semaphore(3)
-    tasks = [fakeFetch(i, sem) for i in range(1, 9)]
+    tasks = [fake_fetch(i, sem) for i in range(1, 9)]
     await asyncio.gather(*tasks)
 
 
 def main() -> None:
-    asyncio.run(reStart())
+    asyncio.run(re_start())

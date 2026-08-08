@@ -32,9 +32,9 @@ def atimer(
     afunc: Callable[..., Coroutine[Any, Any, None]],
 ) -> Callable[..., Coroutine[Any, Any, None]]:
 
-    async def wrapper(*args: Any, **kargs: Any) -> None:
+    async def wrapper(*args: Any, **kwargs: Any) -> None:
         start_time = time.perf_counter()
-        await afunc(*args, **kargs)
+        await afunc(*args, **kwargs)
         end_time = time.perf_counter()
 
         print(f"\n⏱️ {afunc.__name__} 总耗时：{end_time - start_time:.2f}s")

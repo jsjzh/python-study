@@ -46,9 +46,9 @@ python-study/
 │   ├── assets/             # 图片、markdown 素材
 │   ├── utils/              # 工具模块（目前为空）
 │   └── modules/
-│       ├── bulitModuleDemos/   # 标准库 demo：asyncio/base64/collections/contextlib/datetime/hash/itertools/process/reg/serialize/urllib
-│       ├── thirdModuleDemos/   # 第三方库 demo：chardet/pillow/psutil/requests/sqlite3
-│       └── LLMDemos/           # LLM demo：qwenDemo（DashScope 兼容接口 + SSE 流式）、SSEDemo
+│       ├── built_module_demos/   # 标准库 demo：asyncio/base64/collections/contextlib/datetime/hash/itertools/process/reg/serialize/urllib
+│       ├── third_module_demos/   # 第三方库 demo：chardet/pillow/psutil/requests/sqlite3
+│       └── llm_demos/           # LLM demo：qwen_demo（DashScope 兼容接口 + SSE 流式）、sse_demo
 └── preSrc/                 # 学习练习区（廖雪峰教程风格，可随意改）
     ├── index.py            # 练习主脚本
     ├── data_types_demo.py / operators_demo.py / control_flow_demo.py / functions_demo.py / exception_demo.py / data_structures_demo.py
@@ -58,12 +58,12 @@ python-study/
 
 ## 代码约定
 
-- **demo 文件命名**：`xxxDemo.py`，内部统一提供 `main() -> None` 入口，靠 `python_study/__init__.py` 中注释启停。
-- 类型标注：尽量使用现代语法，如 `list[int]`、`dict[str, int]`、`str | None`、`TypedDict`、`dataclass`、`ParamSpec`（见 `qwenDemo.py`、`dev.py` 与 `preSrc/index.py`）。
+- **demo 文件命名**：`xxx_demo.py`，内部统一提供 `main() -> None` 入口，靠 `python_study/__init__.py` 中注释启停。
+- 类型标注：尽量使用现代语法，如 `list[int]`、`dict[str, int]`、`str | None`、`TypedDict`、`dataclass`、`ParamSpec`（见 `qwen_demo.py`、`dev.py` 与 `preSrc/index.py`）。
 - 依赖已经内置类型支持时，优先用 `from collections.abc import ...`（如 `Iterable`）。
-- 主包代码用绝对导入（`from python_study.modules.LLMDemos import ...`）；`preSrc` 练习脚本可用相对导入。
-- 异步使用 `asyncio` + `aiohttp`（见 `qwenDemo.py`）；不要无脑给所有 IO 加线程。
-- `.env` 存密钥（已被 gitignore），通过 `python-dotenv` 的 `load_dotenv()` 加载（见 `qwenDemo.py` 的 `DASHSCOPE_API_KEY`）。
+- 主包代码用绝对导入（`from python_study.modules.llm_demos import ...`）；`preSrc` 练习脚本可用相对导入。
+- 异步使用 `asyncio` + `aiohttp`（见 `qwen_demo.py`）；不要无脑给所有 IO 加线程。
+- `.env` 存密钥（已被 gitignore），通过 `python-dotenv` 的 `load_dotenv()` 加载（见 `qwen_demo.py` 的 `DASHSCOPE_API_KEY`）。
 - 磁盘上有 `demo.db`，是 sqlite 练习产物，不属于版本管理重点。
 
 ## 使用者背景（重要，请据此调整教学/答疑方式）
@@ -80,5 +80,5 @@ python-study/
 2. 讲解新概念先给"3 分钟能跑通的完整最小示例"，再讲原理与坑，并给前端类比。
 3. 主动指出 Windows 下常见坑：`\` vs `/`、文件编码（GBK/UTF-8）、换行符、中文路径、进程信号。
 4. 学习进度以仓库实际文件为准：`preSrc` 是基础练习区，`src/python_study/modules` 是进阶 demo 区。
-5. 新增 demo 遵循现有约定：`xxxDemo.py` + `main()`，并在 `__init__.py` 的注释列表登记。
-6. 本仓库目标是 Agent 开发，涉及 LLM 的代码（`LLMDemos/`）是进阶方向，练习时优先复用现有 DashScope 调用模式。
+5. 新增 demo 遵循现有约定：`xxx_demo.py` + `main()`，并在 `__init__.py` 的注释列表登记。
+6. 本仓库目标是 Agent 开发，涉及 LLM 的代码（`llm_demos/`）是进阶方向，练习时优先复用现有 DashScope 调用模式。

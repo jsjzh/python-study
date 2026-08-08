@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("DASHSCOPE_API_KEY")
-WorkspaceId = "ws-r75qnvqk77br9aj1"
+workspace_id = "ws-r75qnvqk77br9aj1"
 
 # url = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
-url = f"https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions"
+url = f"https://{workspace_id}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions"
 headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
 
@@ -32,7 +32,7 @@ class ChatData(TypedDict):
     object: str
 
 
-async def chatQwen(question: str):
+async def chat_qwen(question: str):
     payload = {
         "model": "qwen-plus",
         "messages": [
@@ -80,5 +80,5 @@ async def chatQwen(question: str):
 
 
 def main() -> None:
-    asyncio.run(chatQwen("现在几点了"))
+    asyncio.run(chat_qwen("现在几点了"))
     pass

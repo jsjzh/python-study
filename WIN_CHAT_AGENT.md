@@ -44,9 +44,9 @@
      高阶函数（`map`/`filter`/`reduce`/`sorted`）、闭包与 `nonlocal`、装饰器（`@log`、`@metric`）、
      `functools.partial`、`dataclass`、`TypedDict`、`ParamSpec`
 2. **`src/python_study/` 主包**（进阶 demo 区）：
-   - `modules/bulitModuleDemos/`：标准库 demo（asyncio、base64、collections、contextlib、datetime、hash、itertools、process、regex、serialize、urllib）
-   - `modules/thirdModuleDemos/`：第三方库 demo（chardet、pillow、psutil、requests、sqlite3）
-   - `modules/LLMDemos/`：LLM demo（qwenDemo——用 aiohttp 调 DashScope 兼容接口做 SSE 流式对话；SSEDemo）
+   - `modules/built_module_demos/`：标准库 demo（asyncio、base64、collections、contextlib、datetime、hash、itertools、process、regex、serialize、urllib）
+   - `modules/third_module_demos/`：第三方库 demo（chardet、pillow、psutil、requests、sqlite3）
+   - `modules/llm_demos/`：LLM demo（qwen_demo——用 aiohttp 调 DashScope 兼容接口做 SSE 流式对话；sse_demo）
    - `dev.py`：watchdog 热重载脚本，监听 src 下 `*.py` 变化并自动重启 `uv run start`
    - `utils/`：工具模块（目前为空）
 
@@ -54,7 +54,7 @@
 
 ## 我的代码约定（你给出代码时要遵守）
 
-- demo 文件命名 `xxxDemo.py`，内部提供 `main() -> None` 入口。
+- demo 文件命名 `xxx_demo.py`，内部提供 `main() -> None` 入口。
 - 用现代类型标注：`list[int]`、`dict[str, int]`、`str | None`、`TypedDict`、`dataclass`、`ParamSpec`、`TypeVar`。
 - 可迭代类型优先 `from collections.abc import Iterable` 等。
 - 异步用 `asyncio` + `aiohttp`；不要无脑给所有 IO 加线程。
@@ -76,5 +76,5 @@
 1. asyncio 的深入用法（任务、超时、并发控制）
 2. 进程与线程（multiprocessing / threading / GIL 概念）
 3. 工程化：类型检查（mypy/pyright）、测试（pytest）、日志（logging）
-4. HTTP 与 SSE 流式（衔接我的 LLMDemos）
+4. HTTP 与 SSE 流式（衔接我的 llm_demos）
 5. LLM API 封装 → 工具调用（function calling）→ Agent 循环

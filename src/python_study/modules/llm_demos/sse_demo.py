@@ -27,9 +27,9 @@ async def fetch():
                     line.strip()
                     if not line or not line.startswith("data:"):
                         continue
-                    jsonStr = line[5:].strip()
+                    json_str = line[5:].strip()
                     try:
-                        data: Data = json.loads(jsonStr)
+                        data: Data = json.loads(json_str)
                         print(
                             '----- data.get("title", "no title") -----',
                             data.get("title", "no title"),

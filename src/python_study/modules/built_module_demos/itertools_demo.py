@@ -1,7 +1,7 @@
 import itertools
 
 
-def getPi(n: int):
+def get_pi(n: int):
     result = 0
     for c in itertools.takewhile(lambda x: x <= n, itertools.count(1)):
         count = 1 / (c * 2 - 1)
@@ -23,8 +23,8 @@ def main() -> None:
     #     print("----- key -----", key)
     #     print("----- list(arr) -----", list(arr))
 
-    print("----- getPi(10) -----", getPi(10))
-    print("----- getPi(100) -----", getPi(100))
-    print("----- getPi(1000) -----", getPi(1000))
-    print("----- getPi(10000) -----", getPi(10000))
+    print("----- get_pi(10) -----", get_pi(10))
+    print("----- get_pi(100) -----", get_pi(100))
+    print("----- get_pi(1000) -----", get_pi(1000))
+    print("----- get_pi(10000) -----", get_pi(10000))
     pass

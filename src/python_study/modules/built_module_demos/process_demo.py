@@ -7,22 +7,22 @@ import time
 
 def task(index):
     print(f"sub task index: {index} {os.getpid()}")
-    startTime = time.time()
+    start_time = time.time()
     time.sleep(random.random() * 3)
-    endTime = time.time()
-    print(f"{index} run time {endTime - startTime}")
+    end_time = time.time()
+    print(f"{index} run time {end_time - start_time}")
 
 
-def processTask():
+def process_task():
     print(f"parent process {os.getpid()}")
-    p = Process(target=task, args=("processTask",))
+    p = Process(target=task, args=("process_task",))
     p.start()
     print("waiting...")
     p.join()
     print("waiting done")
 
 
-def processTasks():
+def process_tasks():
     print(f"parent process {os.getpid()}")
     p = Pool(3)
     for i in range(5):
@@ -33,14 +33,14 @@ def processTasks():
     print("all success")
 
 
-def subProcessTask():
-    print("run subProcessTask")
+def sub_process_task():
+    print("run sub_process_task")
     result = subprocess.call(["python", "--version"])
     print(f"Exit code: {result}")
 
 
-# def subProcessTaskCommunicate():
-#     print("run subProcessTaskCommunicate")
+# def sub_process_task_communicate():
+#     print("run sub_process_task_communicate")
 #     p = subprocess.Popen(
 #         ["python"],
 #         stdin=subprocess.PIPE,
@@ -54,8 +54,8 @@ def subProcessTask():
 
 
 def main():
-    # processTask()
-    # processTasks()
-    subProcessTask()
-    ## subProcessTaskCommunicate()
+    # process_task()
+    # process_tasks()
+    sub_process_task()
+    ## sub_process_task_communicate()
     pass

@@ -10,8 +10,8 @@ def main():
         print("----- result.group(0) -----", result.group(0))
         print("----- result.group(1) -----", result.group(1))
         print("----- result.group(2) -----", result.group(2))
-    regPhone = re.compile(r"(^\d{11}$)")
+    reg_phone = re.compile(r"(^\d{11}$)")
     print(
-        "----- regPhone.match('11111111111').groups() -----",
-        regPhone.match("11111111111").groups(),
+        "----- reg_phone.match('11111111111').groups() -----",
+        reg_phone.match("11111111111").groups(),
     )
