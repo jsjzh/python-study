@@ -80,16 +80,21 @@ async def fake_fetch(
     max: float = 2.0,
     sem: asyncio.Semaphore | None = None,
     fail: bool = False,
-    timeout: int | None = None,
+    timeout: int | float | None = None,
 ) -> str | None:
     async with sem if sem is not None else nullcontext():
-        async with asyncio.timeout(timeout) if timeout is not None else nullcontext():
-            delay = random.uniform(min, max)
-            print(f"[{index}] 🟢 开始下载 (delay={delay:.1f}s)")
-            await asyncio.sleep(delay)
+        try:
+            async with (
+                asyncio.timeout(timeout) if timeout is not None else nullcontext()
+            ):
+                delay = random.uniform(min, max)
+                print(f"[{index}] 🟢 开始下载 (delay={delay:.1f}s)")
+                await asyncio.sleep(delay)
 
-            if fail:
-                raise ValueError(f"errorIndex: {index} trigger")
+                if fail:
+                    raise ValueError(f"[{index}] valueError trigger")
 
-            print(f"[{index}] ✅ 下载完成")
-            return f"data_{index}"
+                print(f"[{index}] ✅ 下载完成")
+                return f"data_{index}"
+        except TimeoutError:
+            raise TimeoutError(f"[{index}] TimeoutError trigger, >{timeout}s")
