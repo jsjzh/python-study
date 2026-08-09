@@ -1,5 +1,6 @@
+from ast import TypeVar
 import asyncio
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from contextlib import nullcontext
 from dataclasses import dataclass
 import dataclasses
@@ -8,7 +9,7 @@ import json
 from os import path
 import os
 import time
-from typing import Any, Coroutine
+from typing import Any, Coroutine, ParamSpec
 import random
 from typing import List
 
@@ -50,13 +51,12 @@ def get_assets_path(paths: list[str]) -> str:
 def atimer(
     afunc: Callable[..., Coroutine[Any, Any, Any]],
 ) -> Callable[..., Coroutine[Any, Any, Any]]:
-
-    async def wrapper(*args: Any, **kwargs: Any) -> None:
-        start_time = time.perf_counter()
-        await afunc(*args, **kwargs)
-        end_time = time.perf_counter()
-
-        print(f"\n⏱️ {afunc.__name__} 总耗时：{end_time - start_time:.2f}s")
+    async def wrapper(*args: object, **kwargs: object) -> Any:
+        start = time.perf_counter()
+        result = await afunc(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+        print(f"\n⏱️ {afunc.__name__} 总耗时：{elapsed:.2f}s")
+        return result
 
     return wrapper
 
