@@ -2,12 +2,15 @@ import asyncio
 from collections.abc import Callable
 from contextlib import nullcontext
 from dataclasses import dataclass
+import dataclasses
 from enum import Enum
+import json
 from os import path
 import os
-import random
 import time
 from typing import Any, Coroutine
+import random
+from typing import List
 
 base = path.join(os.getcwd(), "src", "python_study")
 
@@ -151,3 +154,66 @@ async def safe_fake_fetch(
         data=result_data,
         duration=time.perf_counter() - start_time,
     )
+
+
+def split_string_randomly(s: str, n: int) -> List[str]:
+    """
+    将一个字符串随机分割成包含 N 个元素的列表。
+
+    Args:
+        s: 待分割的原始字符串。
+        n: 目标子串数量，必须 >= 1。
+
+    Returns:
+        包含 N 个子串的列表，拼接后等于原字符串。
+
+    Raises:
+        ValueError: 当 n < 1 或 n > len(s) + 1 时抛出。
+    """
+    if n < 1:
+        raise ValueError(f"n 必须 >= 1，当前值为 {n}")
+    if n > len(s) + 1:
+        raise ValueError(
+            f"n={n} 超出范围，长度为 {len(s)} 的字符串最多可分成 {len(s) + 1} 段"
+        )
+
+    # 在 [1, len(s)] 中随机选 n-1 个不重复的切割位置
+    cut_points: List[int] = sorted(random.sample(range(1, len(s) + 1), n - 1))
+
+    # 加上首尾边界，依次切片
+    boundaries: List[int] = [0] + cut_points + [len(s)]
+    result: List[str] = [s[boundaries[i] : boundaries[i + 1]] for i in range(n)]
+
+    return result
+
+
+@dataclass
+class StreamData:
+    id: int
+    name: str
+    age: int
+
+
+fake_data_arr = split_string_randomly(
+    json.dumps(
+        [
+            StreamData(
+                id=i,
+                name=random.choice(["king", "mm", "gg"]),
+                age=random.randint(18, 38),
+            )
+            for i in range(20)
+        ],
+        default=lambda obj: dataclasses.asdict(obj),
+    ),
+    random.randint(20, 30),
+)
+
+
+async def fake_sse_producer(queue: asyncio.Queue[str | None], has_log: bool = False):
+    for chunk in fake_data_arr:
+        await asyncio.sleep(random.uniform(0.2, 0.5))
+        await queue.put(chunk)
+        if has_log:
+            print(f"----- producer send chunk: {chunk} -----")
+    await queue.put(None)
