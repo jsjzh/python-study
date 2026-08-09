@@ -1,7 +1,7 @@
 import asyncio
-import random
+from statistics import mean
 
-from python_study.utils import atimer, fake_fetch
+from python_study.utils import FetchStatus, atimer, safe_fake_fetch
 
 
 @atimer
@@ -9,57 +9,27 @@ async def run() -> None:
     sem = asyncio.Semaphore(4)
     ids = range(1, 21)
 
-    try:
-        async with asyncio.TaskGroup() as tg:
-            tasks = [
-                tg.create_task(
-                    fake_fetch(
-                        index=index,
-                        min=0.3,
-                        max=2.5,
-                        timeout=1.0,
-                        sem=sem,
-                        fail=random.choice(seq=[True, False]),
-                    )
-                )
-                for index in ids
-            ]
-    except ExceptionGroup as group:
-        print(f"----- 异常数：{len(group.exceptions)} -----")
-        for exc in group.exceptions:
-            print(f"----- 异常名称：{type(exc).__name__} -----")
-            print(f"----- 异常内容：{exc} -----")
+    async with asyncio.TaskGroup() as tg:
+        tasks = [tg.create_task(safe_fake_fetch(index=index, sem=sem)) for index in ids]
 
-    results = [
-        task.result()
-        for task in tasks
-        if not task.cancelled() and task.exception() is None
-    ]
-
-    success_count = sum(
-        [1 for task in tasks if not task.cancelled() and task.exception() is None]
-    )
-
+    success_count = sum([1 for task in tasks if task.result().status == FetchStatus.OK])
     timeout_count = sum(
-        [
-            1
-            for task in tasks
-            if not task.cancelled() and isinstance(task.exception(), TimeoutError)
-        ]
+        [1 for task in tasks if task.result().status == FetchStatus.TIMEOUT]
     )
-
     error_count = sum(
-        [
-            1
-            for task in tasks
-            if not task.cancelled() and isinstance(task.exception(), Exception)
-        ]
+        [1 for task in tasks if task.result().status == FetchStatus.ERROR]
     )
+    success_time = [
+        task.result().duration
+        for task in tasks
+        if task.result().status == FetchStatus.OK
+    ]
+    success_avg_time = mean(success_time) if success_time else 0.0
 
-    print("----- results -----", results)
-    print("----- success_count -----", success_count)
-    print("----- timeout_count -----", timeout_count)
-    print("----- error_count -----", error_count)
+    print(f"success_count: {success_count}")
+    print(f"timeout_count: {timeout_count}")
+    print(f"error_count: {error_count}")
+    print(f"success_avg_time: {success_avg_time:.2f}s")
 
 
 def main() -> None:

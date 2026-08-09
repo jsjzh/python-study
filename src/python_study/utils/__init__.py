@@ -1,6 +1,8 @@
 import asyncio
 from collections.abc import Callable
 from contextlib import nullcontext
+from dataclasses import dataclass
+from enum import Enum
 from os import path
 import os
 import random
@@ -76,18 +78,18 @@ def timer(
 # nullcontext() 是标准库 contextlib 提供的"什么都不做的上下文管理器"，Python 3.10 起支持 async with，所以能直接这样用。这样写的好处就是代码体只写一遍，不用把下载逻辑复制两份
 async def fake_fetch(
     index: int,
-    min: float = 0.5,
-    max: float = 2.0,
+    min_delay: float = 0.5,
+    max_delay: float = 2.0,
     sem: asyncio.Semaphore | None = None,
     fail: bool = False,
-    timeout: int | float | None = None,
+    timeout: float | None = None,
 ) -> str | None:
     async with sem if sem is not None else nullcontext():
         try:
             async with (
                 asyncio.timeout(timeout) if timeout is not None else nullcontext()
             ):
-                delay = random.uniform(min, max)
+                delay = random.uniform(min_delay, max_delay)
                 print(f"[{index}] 🟢 开始下载 (delay={delay:.1f}s)")
                 await asyncio.sleep(delay)
 
@@ -98,3 +100,54 @@ async def fake_fetch(
                 return f"data_{index}"
         except TimeoutError:
             raise TimeoutError(f"[{index}] TimeoutError trigger, >{timeout}s")
+
+
+class FetchStatus(Enum):
+    OK = "ok"
+    TIMEOUT = "timeout"
+    ERROR = "error"
+
+
+@dataclass
+class FetchResult[T]:
+    data: T
+    duration: float
+    status: FetchStatus = FetchStatus.OK
+    message: str | None = None
+
+
+async def safe_fake_fetch(
+    index: int, sem: asyncio.Semaphore
+) -> FetchResult[str | None]:
+
+    start_time = time.perf_counter()
+
+    try:
+        result_data = await fake_fetch(
+            index=index,
+            min_delay=0.3,
+            max_delay=2.5,
+            sem=sem,
+            fail=random.choice([True, False]),
+            timeout=1.0,
+        )
+
+    except TimeoutError:
+        return FetchResult(
+            data=None,
+            duration=time.perf_counter() - start_time,
+            status=FetchStatus.TIMEOUT,
+            message=f"{index} timeout error trigger",
+        )
+    except Exception:
+        return FetchResult(
+            data=None,
+            duration=time.perf_counter() - start_time,
+            status=FetchStatus.ERROR,
+            message=f"{index} error trigger",
+        )
+
+    return FetchResult(
+        data=result_data,
+        duration=time.perf_counter() - start_time,
+    )
