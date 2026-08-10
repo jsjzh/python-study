@@ -59,26 +59,35 @@ class AsyncRateLimitedCrawler(object):
         self._queue = asyncio.Queue[CrawlTask](rate_count)
         self._timeout = timeout
         self._retry_count = retry_count
-        # self._tasks: dict[int, Any] = {}
+        self._tasks: dict[int, Any] = {}
 
-        asyncio.create_task(self.start())
+        # asyncio.create_task(self.start())
+        asyncio.create_task(self.watch())
 
-    async def start(self) -> None:
+    async def watch(self) -> None:
         while True:
-            ctask = await self._queue.get()
-            event = asyncio.Event()
-            print(f"start: {ctask.url}")
-            task = asyncio.create_task(
-                simple_fake_fetch(url=ctask.url, sem=self._sem, event=event)
-            )
+            pass
 
-            await event.wait()
+    # async def start(self) -> None:
+    #     while True:
+    #         ctask = await self._queue.get()
+    #         event = asyncio.Event()
+    #         print(f"start: {ctask.url}")
+    #         task = asyncio.create_task(
+    #             simple_fake_fetch(url=ctask.url, sem=self._sem, event=event)
+    #         )
 
-            print(f"----- task.result(): {task.result()} -----")
+    #         await event.wait()
+
+    #         print(f"----- task.result(): {task.result()} -----")
 
     async def crawl(self, tasks: Iterable[CrawlTask]) -> list[CrawlResult]:
         for task in tasks:
-            await self._queue.put(task)
+            event = asyncio.Event()
+            self._tasks[task.task_id] = asyncio.create_task(
+                simple_fake_fetch(url=task.url, sem=self._sem, event=event)
+            )
+
         return []
 
     async def cancel(self) -> None:
