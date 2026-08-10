@@ -1,6 +1,30 @@
 import asyncio
-from contextlib import nullcontext
 from enum import Enum
+
+
+async def work(id: int, ready_event: asyncio.Event) -> None:
+    print(f"----- [{id}] 等待服务就绪 -----")
+    await ready_event.wait()
+    print(f"----- [{id}] 开始工作 -----")
+
+
+async def init(ready_event: asyncio.Event) -> None:
+    print(f"----- 初始化中 -----")
+    await asyncio.sleep(2)
+    print(f"----- 初始化完成 -----")
+    ready_event.set()
+
+
+async def run() -> None:
+    ready_event = asyncio.Event()
+
+    async with asyncio.TaskGroup() as tg:
+        tasks = [
+            tg.create_task(init(ready_event)),
+            *[tg.create_task(work(id, ready_event)) for id in range(1, 11)],
+        ]
+
+    print(f"----- 所有 worker 已完成 -----")
 
 
 class ApprovalStatus(Enum):
@@ -56,31 +80,6 @@ class ApprovalGate(object):
 
 async def run2() -> None:
     ag = ApprovalGate("工作审批")
-
-
-async def work(id: int, ready_event: asyncio.Event) -> None:
-    print(f"----- [{id}] 等待服务就绪 -----")
-    await ready_event.wait()
-    print(f"----- [{id}] 开始工作 -----")
-
-
-async def init(ready_event: asyncio.Event) -> None:
-    print(f"----- 初始化中 -----")
-    await asyncio.sleep(2)
-    print(f"----- 初始化完成 -----")
-    ready_event.set()
-
-
-async def run() -> None:
-    ready_event = asyncio.Event()
-
-    async with asyncio.TaskGroup() as tg:
-        tasks = [
-            tg.create_task(init(ready_event)),
-            *[tg.create_task(work(id, ready_event)) for id in range(1, 11)],
-        ]
-
-    print(f"----- 所有 worker 已完成 -----")
 
 
 def main() -> None:

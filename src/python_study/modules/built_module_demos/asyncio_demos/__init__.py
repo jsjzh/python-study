@@ -15,8 +15,8 @@ def main() -> None:
     # semaphore_demo.main()
     # base_exam_demo.main()
     # task_group_demo.main()
-    # queue_demo.main()
+    queue_demo.main()
     # to_thread_demo.main()
     # lock_demo.main()
-    event_demo.main()
+    # event_demo.main()
     pass
