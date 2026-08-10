@@ -1,4 +1,5 @@
 from python_study.modules.built_module_demos.asyncio_demos import (
+    advanced_exam_demo,
     all_def_demo,
     base_exam_demo,
     event_demo,
@@ -15,8 +16,9 @@ def main() -> None:
     # semaphore_demo.main()
     # base_exam_demo.main()
     # task_group_demo.main()
-    queue_demo.main()
+    # queue_demo.main()
     # to_thread_demo.main()
     # lock_demo.main()
     # event_demo.main()
+    advanced_exam_demo.main()
     pass
