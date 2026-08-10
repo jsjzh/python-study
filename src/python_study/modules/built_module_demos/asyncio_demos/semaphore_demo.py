@@ -13,7 +13,7 @@ from python_study.utils import fake_fetch
 
 async def re_start() -> None:
     sem = asyncio.Semaphore(3)
-    tasks = [fake_fetch(i, sem) for i in range(1, 9)]
+    tasks = [fake_fetch(i, sem=sem) for i in range(1, 9)]
     await asyncio.gather(*tasks)
 
 

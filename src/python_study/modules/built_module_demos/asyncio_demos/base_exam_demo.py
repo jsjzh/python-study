@@ -8,7 +8,7 @@ async def run() -> None:
     sem = asyncio.Semaphore(4)
     results = await asyncio.gather(
         *[
-            asyncio.wait_for(fake_fetch(id, sem), timeout=1.2)
+            asyncio.wait_for(fake_fetch(id, sem=sem), timeout=1.2)
             for id in [i for i in range(1, 11)]
         ],
         return_exceptions=True,
