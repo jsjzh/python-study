@@ -56,7 +56,7 @@ class AsyncRateLimitedCrawler(object):
         self, sem_count: int, rate_count: int, timeout: float, retry_count: int
     ) -> None:
         self._sem = asyncio.Semaphore(sem_count)
-        self._queue = asyncio.Queue[CrawlTask](rate_count)
+        self._queue = asyncio.Queue(rate_count)
         self._timeout = timeout
         self._retry_count = retry_count
         self._tasks: dict[int, Any] = {}
@@ -66,7 +66,7 @@ class AsyncRateLimitedCrawler(object):
 
     async def watch(self) -> None:
         while True:
-            pass
+            await self._queue.get()
 
     # async def start(self) -> None:
     #     while True:
