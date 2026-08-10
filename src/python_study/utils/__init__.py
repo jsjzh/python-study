@@ -120,7 +120,7 @@ class FetchResult[T]:
 
 
 async def safe_fake_fetch(
-    index: int, sem: asyncio.Semaphore
+    index: int, sem: asyncio.Semaphore | None = None
 ) -> FetchResult[str | None]:
 
     start_time = time.perf_counter()
