@@ -1,7 +1,6 @@
 import asyncio
 from collections.abc import Iterable
 from dataclasses import dataclass
-from email.policy import default
 from enum import Enum
 import random
 
@@ -42,10 +41,13 @@ class AsyncRateLimitedCrawler(object):
         max_delay: float = 0.8,
     ) -> None:
         self._sem = asyncio.Semaphore(sem_count)
+
         self._timeout = timeout
         self._retry_count = retry_count
         self._min_delay = min_delay
         self._max_delay = max_delay
+
+        self._tasks: list[asyncio.Task[CrawlResult]] = []
         self._task_results: dict[int, CrawlResult] = {}
 
     async def _fetch(
@@ -122,16 +124,14 @@ class AsyncRateLimitedCrawler(object):
                 for task in crawl_tasks
             ]
 
+            self._tasks += tasks
+
         for task in tasks:
             result = task.result()
 
             self._task_results[result.task_id] = result
 
             match result.status:
-                case CrawlStatus.SUCCESS:
-                    results.append(result)
-                case CrawlStatus.TIMEOUT:
-                    results.append(result)
                 case CrawlStatus.FAILED:
                     retry_tasks.append(result)
                 case _:
@@ -152,7 +152,7 @@ async def run() -> None:
     crawler = AsyncRateLimitedCrawler(
         sem_count=3,
         rate_count=3,
-        retry_count=3,
+        retry_count=1,
         timeout=0.6,
         min_delay=0.2,
         max_delay=0.8,
@@ -170,21 +170,10 @@ async def run() -> None:
                 print(
                     f"[task id: {data.task_id}] status: {data.status.value} retry: {data.retries} body: {data.body}"
                 )
-            case CrawlStatus.TIMEOUT:
-                print(
-                    f"[task id: {data.task_id}] status: {data.status.value} retry: {data.retries} error: {data.error}"
-                )
-            case CrawlStatus.FAILED:
-                print(
-                    f"[task id: {data.task_id}] status: {data.status.value} retry: {data.retries} error: {data.error}"
-                )
             case _:
                 print(
                     f"[task id: {data.task_id}] status: {data.status.value} retry: {data.retries} error: {data.error}"
                 )
-
-    # await asyncio.sleep(3)
-    # await crawler.crawl([CrawlTask(task_id=id, url=f"url-{id}") for id in range(6, 11)])
 
 
 def main() -> None:
