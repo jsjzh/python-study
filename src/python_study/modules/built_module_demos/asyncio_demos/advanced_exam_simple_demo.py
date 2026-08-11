@@ -6,15 +6,33 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
-# def retry_async(
-#     max_retries: int = 3, base_delay: float = 0.5, timeout: float | None = None
-# ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[R]]]:
-#     async def wrapper(*arg: R, **kwarg: R) -> None:
-#         pass
+def retry_async(
+    max_retries: int = 3, base_delay: float = 0.5, timeout: float | None = None
+) -> Callable[..., Any]:
+
+    def wrap_wrapper(func: Any) -> Callable[P, Any]:
+
+        async def wrapper(*args: P.args, **kwargs: P.kwargs) -> None:
+            try:
+                async with asyncio.timeout(timeout):
+                    return await func(*args, **kwargs)
+            except TimeoutError:
+                raise
+
+        return wrapper
+
+    return wrap_wrapper
+
+
+@retry_async(max_retries=3, base_delay=0.5, timeout=0.1)
+async def fetch(url: str) -> str:
+    await asyncio.sleep(1)
+    return f"data-{url}"
 
 
 async def run() -> None:
-    pass
+    data = await fetch("url")
+    print(f"----- data: {data} -----")
 
 
 def main() -> None:
