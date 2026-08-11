@@ -10,7 +10,6 @@ class CrawlStatus(Enum):
     TIMEOUT = "timeout"
     FAILED = "failed"
     CANCELLED = "cancelled"
-    RETRY_LIMIT = "retry_limit"
 
 
 @dataclass(frozen=True)
@@ -33,7 +32,6 @@ class AsyncRateLimitedCrawler(object):
     def __init__(
         self,
         sem_count: int,
-        # TODO
         rate_count: int,
         retry_count: int,
         timeout: float,
@@ -47,105 +45,153 @@ class AsyncRateLimitedCrawler(object):
         self._min_delay = min_delay
         self._max_delay = max_delay
 
+        self._cancelled = False
+
+        self._rate_count = rate_count
+        self._token_queue: asyncio.Queue[None] = asyncio.Queue(maxsize=1)
+        self._token_queue_task: asyncio.Task[None] | None = None
+
         self._tasks: list[asyncio.Task[CrawlResult]] = []
         self._task_results: dict[int, CrawlResult] = {}
+
+    async def _start_token_queue(self) -> None:
+        while True:
+            await self._token_queue.put(None)
+            await asyncio.sleep(1.0 / self._rate_count)
 
     async def _fetch(
         self,
         task: CrawlTask,
         fail: bool = False,
     ) -> CrawlResult:
-        async with self._sem:
-            pre_task = self._task_results.get(task.task_id)
+        if self._cancelled:
+            return CrawlResult(
+                task_id=task.task_id,
+                url=task.url,
+                status=CrawlStatus.CANCELLED,
+                body=None,
+                error=f"fetch error cancel",
+                retries=0,
+            )
 
-            if pre_task:
-                if self._retry_count == pre_task.retries:
-                    return CrawlResult(
-                        task_id=task.task_id,
-                        url=task.url,
-                        status=CrawlStatus.RETRY_LIMIT,
-                        body=None,
-                        error=f"fetch error retry limit",
-                        retries=pre_task.retries,
-                    )
+        pre_task = self._task_results.get(task.task_id)
 
-                wait_time = 0.5 * pow(2, pre_task.retries)
+        try:
+            await self._token_queue.get()
 
-                print(
-                    f"[task id: {task.task_id}] retry {pre_task.retries + 1} wait {wait_time}s fetching..."
-                )
-                await asyncio.sleep(wait_time)
-            else:
-                print(f"[task id: {task.task_id}] fetching...")
-
-            try:
-                async with asyncio.timeout(self._timeout):
-                    await asyncio.sleep(
-                        random.uniform(self._min_delay, self._max_delay)
-                    )
-                    if fail:
+            async with self._sem:
+                if pre_task:
+                    if self._retry_count == pre_task.retries:
                         return CrawlResult(
                             task_id=task.task_id,
                             url=task.url,
                             status=CrawlStatus.FAILED,
                             body=None,
-                            error=f"fetch error fail",
-                            retries=pre_task.retries + 1 if pre_task else 0,
+                            error=f"fetch error retry limit",
+                            retries=pre_task.retries,
                         )
-                    else:
-                        return CrawlResult(
-                            task_id=task.task_id,
-                            url=task.url,
-                            status=CrawlStatus.SUCCESS,
-                            body=f"fetch data {task.url}",
-                            error=None,
-                            retries=pre_task.retries + 1 if pre_task else 0,
+
+                    wait_time = 0.5 * pow(2, pre_task.retries)
+
+                    print(
+                        f"[task id: {task.task_id}] retry {pre_task.retries + 1} wait {wait_time}s fetching..."
+                    )
+                    await asyncio.sleep(wait_time)
+                else:
+                    print(f"[task id: {task.task_id}] fetching...")
+
+                try:
+                    async with asyncio.timeout(self._timeout):
+                        await asyncio.sleep(
+                            random.uniform(self._min_delay, self._max_delay)
                         )
-            except TimeoutError:
-                return CrawlResult(
-                    task_id=task.task_id,
-                    url=task.url,
-                    status=CrawlStatus.TIMEOUT,
-                    body=None,
-                    error=f"fetch error timeout",
-                    retries=pre_task.retries + 1 if pre_task else 0,
-                )
-
-    async def crawl(self, crawl_tasks: Iterable[CrawlTask]) -> list[CrawlResult]:
-        results: list[CrawlResult] = []
-        retry_tasks: list[CrawlResult] = []
-        retry_results: list[CrawlResult] = []
-
-        async with asyncio.TaskGroup() as tg:
-            tasks = [
-                tg.create_task(
-                    self._fetch(task=task, fail=random.choice([False, True]))
-                )
-                for task in crawl_tasks
-            ]
-
-            self._tasks += tasks
-
-        for task in tasks:
-            result = task.result()
-
-            self._task_results[result.task_id] = result
-
-            match result.status:
-                case CrawlStatus.FAILED:
-                    retry_tasks.append(result)
-                case _:
-                    results.append(result)
-
-        if len(retry_tasks):
-            retry_results = await self.crawl(
-                [CrawlTask(task_id=task.task_id, url=task.url) for task in retry_tasks]
+                        if fail:
+                            return CrawlResult(
+                                task_id=task.task_id,
+                                url=task.url,
+                                status=CrawlStatus.FAILED,
+                                body=None,
+                                error=f"fetch error fail",
+                                retries=pre_task.retries + 1 if pre_task else 0,
+                            )
+                        else:
+                            return CrawlResult(
+                                task_id=task.task_id,
+                                url=task.url,
+                                status=CrawlStatus.SUCCESS,
+                                body=f"fetch data {task.url}",
+                                error=None,
+                                retries=pre_task.retries + 1 if pre_task else 0,
+                            )
+                except TimeoutError:
+                    return CrawlResult(
+                        task_id=task.task_id,
+                        url=task.url,
+                        status=CrawlStatus.TIMEOUT,
+                        body=None,
+                        error=f"fetch error timeout",
+                        retries=pre_task.retries + 1 if pre_task else 0,
+                    )
+        except asyncio.CancelledError:
+            return CrawlResult(
+                task_id=task.task_id,
+                url=task.url,
+                status=CrawlStatus.CANCELLED,
+                body=None,
+                error=f"fetch error cancel",
+                retries=pre_task.retries + 1 if pre_task else 0,
             )
 
-        return [*results, *retry_results]
+    async def crawl(self, crawl_tasks: Iterable[CrawlTask]) -> list[CrawlResult]:
+        self._cancelled = False
+        self._token_queue_task = asyncio.create_task(self._start_token_queue())
+
+        pending: list[CrawlTask] = list(crawl_tasks)
+        results: list[CrawlResult] = []
+        attempts = 0
+
+        try:
+            while pending and attempts <= self._retry_count:
+
+                if self._cancelled:
+                    break
+
+                batch: list[asyncio.Task[CrawlResult]] = [
+                    asyncio.create_task(
+                        self._fetch(t, fail=random.choice([False, True]))
+                    )
+                    for t in pending
+                ]
+
+                self._tasks.extend(batch)
+
+                batch_results = await asyncio.gather(*batch)
+
+                retry_pending: list[CrawlTask] = []
+
+                for r in batch_results:
+                    if r.status == CrawlStatus.FAILED:
+                        self._task_results[r.task_id] = r
+                        retry_pending.append(CrawlTask(task_id=r.task_id, url=r.url))
+                    else:
+                        results.append(r)
+
+                pending = retry_pending
+                attempts += 1
+        finally:
+            self._token_queue_task.cancel()
+
+        return results
 
     async def cancel(self) -> None:
-        pass
+        self._cancelled = True
+
+        if self._token_queue_task is not None:
+            self._token_queue_task.cancel()
+
+        for task in self._tasks:
+            if not task.done():
+                task.cancel()
 
 
 async def run() -> None:
@@ -158,9 +204,14 @@ async def run() -> None:
         max_delay=0.8,
     )
 
-    datas = await crawler.crawl(
-        [CrawlTask(task_id=id, url=f"url-{id}") for id in range(1, 11)]
+    crawl_task = asyncio.create_task(
+        crawler.crawl([CrawlTask(task_id=id, url=f"url-{id}") for id in range(1, 11)])
     )
+
+    await asyncio.sleep(10)
+    await crawler.cancel()
+
+    datas = await crawl_task
 
     print()
 

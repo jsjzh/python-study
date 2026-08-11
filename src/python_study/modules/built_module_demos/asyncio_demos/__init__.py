@@ -1,5 +1,7 @@
 from python_study.modules.built_module_demos.asyncio_demos import (
+    advanced_exam_agent_demo,
     advanced_exam_demo,
+    advanced_exam_simple_demo,
     all_def_demo,
     base_exam_demo,
     event_demo,
@@ -20,5 +22,7 @@ def main() -> None:
     # to_thread_demo.main()
     # lock_demo.main()
     # event_demo.main()
-    advanced_exam_demo.main()
+    # advanced_exam_demo.main()
+    # advanced_exam_agent_demo.main()
+    advanced_exam_simple_demo.main()
     pass
