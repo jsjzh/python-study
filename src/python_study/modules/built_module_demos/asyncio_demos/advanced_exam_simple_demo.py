@@ -1,5 +1,6 @@
 import asyncio
 from collections.abc import Awaitable, Callable
+import functools
 import json
 import random
 from typing import ParamSpec, TypeVar
@@ -15,6 +16,8 @@ def retry_async(
         raise ValueError(f"max_retries 必须大于等于 0")
 
     def wrap_wrapper(afunc: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
+
+        @functools.wraps(afunc)
         async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
 
             for current_count in range(max_retries + 1):

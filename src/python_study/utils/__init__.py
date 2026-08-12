@@ -1,15 +1,15 @@
-from ast import TypeVar
 import asyncio
 from collections.abc import Awaitable, Callable
 from contextlib import nullcontext
 from dataclasses import dataclass
 import dataclasses
 from enum import Enum
+import functools
 import json
 from os import path
 import os
 import time
-from typing import Any, Coroutine, ParamSpec
+from typing import Any, Coroutine, ParamSpec, TypeVar
 import random
 from typing import List
 
@@ -48,10 +48,17 @@ def get_assets_path(paths: list[str]) -> str:
 
 
 # Coroutine[Any, Any, None] 可以用 Awaitable[None] 替代
+
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
 def atimer(
-    afunc: Callable[..., Coroutine[Any, Any, Any]],
-) -> Callable[..., Coroutine[Any, Any, Any]]:
-    async def wrapper(*args: object, **kwargs: object) -> Any:
+    afunc: Callable[P, Coroutine[Any, Any, R]],
+) -> Callable[P, Coroutine[Any, Any, R]]:
+
+    @functools.wraps(afunc)
+    async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         start = time.perf_counter()
         result = await afunc(*args, **kwargs)
         elapsed = time.perf_counter() - start
@@ -61,16 +68,15 @@ def atimer(
     return wrapper
 
 
-def timer(
-    fun: Callable[..., Any],
-) -> Callable[..., Any]:
+def timer(func: Callable[P, R]) -> Callable[P, R]:
 
-    def wrapper(*args: Any, **kwargs: Any) -> None:
+    @functools.wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         start_time = time.perf_counter()
-        fun(*args, **kwargs)
+        result = func(*args, **kwargs)
         end_time = time.perf_counter()
-
-        print(f"\n⏱️ {fun.__name__} 总耗时：{end_time - start_time:.2f}s")
+        print(f"\n⏱️ {func.__name__} 总耗时：{end_time - start_time:.2f}s")
+        return result
 
     return wrapper
 
