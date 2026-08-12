@@ -8,6 +8,7 @@ from python_study.modules.built_module_demos import (
     date_time_demo,
     hash_demo,
     itertools_demo,
+    process_thread_demos,
     reg_demo,
     process_demo,
     serialize_demo,
@@ -34,7 +35,8 @@ def main() -> None:
     # contextlib_demo.main()
     # urllib_demo.main()
     # asyncio_demo.main()
-    asyncio_demos.main()
+    # asyncio_demos.main()
+    process_thread_demos.main()
 
     # pillow_demo.main()
     # requests_demo.main()
