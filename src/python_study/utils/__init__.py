@@ -53,6 +53,16 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 
+def inline_timer(fun_name: str = "") -> Callable[..., None]:
+    start = time.perf_counter()
+
+    def end() -> None:
+        elapsed = time.perf_counter() - start
+        print(f"\n{fun_name} 总耗时：{elapsed:.2f}s\n")
+
+    return end
+
+
 def atimer(
     afunc: Callable[P, Coroutine[Any, Any, R]],
 ) -> Callable[P, Coroutine[Any, Any, R]]:
@@ -62,7 +72,7 @@ def atimer(
         start = time.perf_counter()
         result = await afunc(*args, **kwargs)
         elapsed = time.perf_counter() - start
-        print(f"⏱️ {afunc.__name__} 总耗时：{elapsed:.2f}s")
+        print(f"\n{afunc.__name__} 总耗时：{elapsed:.2f}s\n")
         return result
 
     return wrapper
@@ -75,7 +85,7 @@ def timer(func: Callable[P, R]) -> Callable[P, R]:
         start_time = time.perf_counter()
         result = func(*args, **kwargs)
         end_time = time.perf_counter()
-        print(f"⏱️ {func.__name__} 总耗时：{end_time - start_time:.2f}s")
+        print(f"\n{func.__name__} 总耗时：{end_time - start_time:.2f}s\n")
         return result
 
     return wrapper
