@@ -26,3 +26,7 @@ def main() -> None:
     # advanced_exam_agent_demo.main()
     advanced_exam_simple_demo.main()
     pass
+
+
+if __name__ == "__main__":
+    main()

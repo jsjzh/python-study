@@ -19,3 +19,7 @@ async def re_start() -> None:
 
 def main() -> None:
     asyncio.run(re_start())
+
+
+if __name__ == "__main__":
+    main()

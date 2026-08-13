@@ -23,3 +23,7 @@ def main() -> None:
     process.join()
 
     print(f"----- parent end count: {count} -----")
+
+
+if __name__ == "__main__":
+    main()

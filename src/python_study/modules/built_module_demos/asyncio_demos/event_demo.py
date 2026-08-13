@@ -85,3 +85,7 @@ async def run2() -> None:
 def main() -> None:
     # asyncio.run(run())
     asyncio.run(run2())
+
+
+if __name__ == "__main__":
+    main()

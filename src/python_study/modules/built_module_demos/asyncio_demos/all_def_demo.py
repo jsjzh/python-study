@@ -108,3 +108,7 @@ async def start() -> None:
 
 def main() -> None:
     asyncio.run(start())
+
+
+if __name__ == "__main__":
+    main()

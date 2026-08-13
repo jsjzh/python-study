@@ -82,3 +82,7 @@ def main() -> None:
     run_process_cpu()
     asyncio.run(run_asyncio_io())
     run_thread_io()
+
+
+if __name__ == "__main__":
+    main()

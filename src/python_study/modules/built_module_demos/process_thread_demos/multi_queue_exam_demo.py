@@ -61,3 +61,7 @@ def main() -> None:
         print(
             f"[worker_id {result.worker_id}] deal {result.num} result {result.result}"
         )
+
+
+if __name__ == "__main__":
+    main()

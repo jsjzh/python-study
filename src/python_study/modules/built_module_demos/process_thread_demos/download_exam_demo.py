@@ -41,3 +41,7 @@ def main() -> None:
     serial_download(count)
     thread_download(count)
     asyncio.run(asyncio_download(count))
+
+
+if __name__ == "__main__":
+    main()

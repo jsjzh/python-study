@@ -156,3 +156,7 @@ def main() -> None:
     print(f"结果：{process_judge_prime(nums)}\n")
     print(f"结果：{asyncio.run(process_with_asyncio_judge_prime(nums))}\n")
     print(f"结果：{asyncio.run(asyncio_judge_prime(nums))}\n")
+
+
+if __name__ == "__main__":
+    main()

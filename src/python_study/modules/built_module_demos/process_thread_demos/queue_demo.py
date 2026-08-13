@@ -18,3 +18,7 @@ def main() -> None:
 
     msg = q.get()
     print(f"----- parent get msg: {msg} -----")
+
+
+if __name__ == "__main__":
+    main()
