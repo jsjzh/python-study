@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import multiprocessing
+from multiprocessing.pool import AsyncResult
 import random
 import time
 
@@ -17,7 +18,7 @@ def compute_hash(data: str) -> str:
 def pool_map_compute_hash() -> None:
     with multiprocessing.Pool(processes=3) as result:
         results = result.map(
-            compute_hash, [f"image_{f'00{id}'[-3:]}" for id in range(1, 11)]
+            compute_hash, [f"image_{index:03d}" for index in range(1, 11)]
         )
 
     for result in results:
@@ -49,11 +50,11 @@ def pool_starmap_apply_filter() -> None:
             apply_filter,
             [
                 (
-                    f"image_{f'0{id}'[-2:]}",
+                    f"image_{index:02d}",
                     random.choice(["brightness", "contrast"]),
                     random.uniform(0.5, 1.2),
                 )
-                for id in range(1, 7)
+                for index in range(1, 7)
             ],
         )
 
@@ -68,18 +69,23 @@ def risky_process(name: str) -> str:
     return f"ok: {name}"
 
 
-# TODO
 @timer
 def pool_apply_async_risky_process() -> None:
-    with multiprocessing.Pool() as pool:
-        tasks = pool.apply_async(risky_process, args=("123",))
 
-    print(f"tasks.get(): {tasks.get()}")
+    with multiprocessing.Pool(processes=3) as pool:
+        async_results = [
+            pool.apply_async(risky_process, args=(f"task_{i}",)) for i in range(1, 6)
+        ]
+        for ar in async_results:
+            try:
+                print(ar.get(timeout=5))
+            except ValueError as e:
+                print(f"error: {e}")
 
 
 def main() -> None:
-    # pool_map_compute_hash()
-    # pool_starmap_apply_filter()
+    pool_map_compute_hash()
+    pool_starmap_apply_filter()
     pool_apply_async_risky_process()
 
 
