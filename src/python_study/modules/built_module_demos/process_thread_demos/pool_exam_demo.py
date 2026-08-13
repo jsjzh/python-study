@@ -61,9 +61,26 @@ def pool_starmap_apply_filter() -> None:
         print(f"{result.output}")
 
 
+def risky_process(name: str) -> str:
+    time.sleep(0.3)
+    if random.random() < 0.4:
+        raise ValueError(f"process failed for name: {name}")
+    return f"ok: {name}"
+
+
+# TODO
+@timer
+def pool_apply_async_risky_process() -> None:
+    with multiprocessing.Pool() as pool:
+        tasks = pool.apply_async(risky_process, args=("123",))
+
+    print(f"tasks.get(): {tasks.get()}")
+
+
 def main() -> None:
-    pool_map_compute_hash()
-    pool_starmap_apply_filter()
+    # pool_map_compute_hash()
+    # pool_starmap_apply_filter()
+    pool_apply_async_risky_process()
 
 
 if __name__ == "__main__":
