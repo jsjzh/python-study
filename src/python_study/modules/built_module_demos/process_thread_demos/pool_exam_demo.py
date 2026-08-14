@@ -2,7 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 import hashlib
 import multiprocessing
-from multiprocessing.pool import AsyncResult
 import random
 import time
 

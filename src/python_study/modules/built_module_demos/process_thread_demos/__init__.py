@@ -2,6 +2,7 @@ from python_study.modules.built_module_demos.process_thread_demos import (
     all_def_demo,
     cpu_busy_demo,
     download_exam_demo,
+    gil_demo,
     multi_queue_exam_demo,
     pool_demo,
     pool_exam_demo,
@@ -20,7 +21,8 @@ def main() -> None:
     # queue_exam_demo.main()
     # multi_queue_exam_demo.main()
     # pool_demo.main()
-    pool_exam_demo.main()
+    # pool_exam_demo.main()
+    gil_demo.main()
 
 
 if __name__ == "__main__":
