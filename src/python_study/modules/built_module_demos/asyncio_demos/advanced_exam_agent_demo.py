@@ -104,6 +104,13 @@ async def _fake_http_fetch(
     return f"<html>{url}</html>"
 
 
+def _make_default_fetcher(min_delay: float, max_delay: float, fail_rate: float) -> Fetcher:
+    async def _fetch(url: str) -> str:
+        return await _fake_http_fetch(url, min_delay, max_delay, fail_rate)
+
+    return _fetch
+
+
 class AsyncRateLimitedCrawler:
     def __init__(
         self,
@@ -130,8 +137,8 @@ class AsyncRateLimitedCrawler:
         self._min_delay = min_delay
         self._max_delay = max_delay
         self._fail_rate = fail_rate
-        self._fetcher = fetcher or (
-            lambda url: _fake_http_fetch(url, min_delay, max_delay, fail_rate)
+        self._fetcher: Fetcher = fetcher or _make_default_fetcher(
+            min_delay, max_delay, fail_rate
         )
 
         self._cancelled = False

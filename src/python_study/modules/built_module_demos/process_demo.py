@@ -5,7 +5,7 @@ import time
 from multiprocessing import Pool, Process
 
 
-def task(index):
+def task(index: int):
     print(f"sub task index: {index} {os.getpid()}")
     start_time = time.time()
     time.sleep(random.random() * 3)

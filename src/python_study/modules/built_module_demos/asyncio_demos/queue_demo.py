@@ -48,7 +48,7 @@ class MessageStatus(Enum):
 class MessageProcessor:
     def __init__(self, maxsize: int = 10) -> None:
         self._maxsize: int = maxsize
-        self._q: asyncio.Queue = asyncio.Queue(maxsize=maxsize)
+        self._q: asyncio.Queue[str | None] = asyncio.Queue(maxsize=maxsize)
         self._status: MessageStatus = MessageStatus.IDLE
         self._tasks: list[asyncio.Task[None]] = []
         self._worker_count: int = 0

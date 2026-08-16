@@ -3,6 +3,7 @@
 import asyncio
 import time
 from collections.abc import Coroutine
+from typing import Any
 
 
 def ts() -> str:
@@ -64,7 +65,7 @@ async def demo_gather() -> None:
 async def demo_as_completed() -> None:
     """③ as_completed：谁先完成谁先返回"""
     print("--- demo_as_completed ---")
-    coros: list[Coroutine] = [
+    coros: list[Coroutine[Any, Any, str]] = [
         fetch("C1", 2),
         fetch("C2", 0.5),
         fetch("C3", 1),

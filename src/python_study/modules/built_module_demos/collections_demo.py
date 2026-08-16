@@ -1,12 +1,18 @@
-from collections import ChainMap, OrderedDict, defaultdict, deque, namedtuple
+from collections import ChainMap, OrderedDict, defaultdict, deque
+from typing import NamedTuple
 
 
-class LastUpdatedOrderedDict(OrderedDict):
-    def __init__(self, count=3):
+class Point(NamedTuple):
+    x: int
+    y: int
+
+
+class LastUpdatedOrderedDict(OrderedDict[int, int]):
+    def __init__(self, count: int = 3) -> None:
         super().__init__()
         self._count = count
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: int, value: int) -> None:
         if key in self:
             super().__setitem__(key, value)
             self.move_to_end(key)
@@ -16,12 +22,15 @@ class LastUpdatedOrderedDict(OrderedDict):
             super().__setitem__(key, value)
 
 
-def main():
-    nt = namedtuple("point", ["x", "y"])
+def main() -> None:
+    nt = Point
     print("----- nt -----", nt)
     print("----- nt(123,456) -----", nt(123, 456))
     print("----- type(nt(123, 456)) -----", type(nt(123, 456)))
-    print("----- isinstance(nt(123, 456), tuple) -----", isinstance(nt(123, 456), tuple))
+    print(
+        "----- isinstance(nt(123, 456), tuple) -----",
+        isinstance(nt(123, 456), tuple),  # type: ignore[reportUnnecessaryIsInstance]
+    )
 
     de = deque(["a", "b", "c"])
     print("----- de -----", de)
@@ -30,7 +39,7 @@ def main():
     de.appendleft("0")
     print("----- de -----", de)
 
-    dd = defaultdict(lambda: "no data")
+    dd: defaultdict[str, str] = defaultdict(lambda: "no data")
     print('----- dd.get("key", "no") -----', dd.get("key", "no"))
     print('----- dd["key"] -----', dd["key"])
 

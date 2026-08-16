@@ -4,7 +4,7 @@ import threading
 import time
 from pathlib import Path
 
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
 SRC_DIR = Path(__file__).resolve().parent.parent
@@ -17,10 +17,10 @@ class ReloadHandler(FileSystemEventHandler):
         self._timer: threading.Timer | None = None
         self._lock = threading.Lock()
 
-    def on_any_event(self, event) -> None:
+    def on_any_event(self, event: FileSystemEvent) -> None:
         if event.is_directory:
             return
-        if not event.src_path.endswith(".py"):
+        if not str(event.src_path).endswith(".py"):
             return
         with self._lock:
             if self._timer is not None:

@@ -19,10 +19,9 @@ async def run() -> None:
     ready_event = asyncio.Event()
 
     async with asyncio.TaskGroup() as tg:
-        [
-            tg.create_task(init(ready_event)),
-            *[tg.create_task(work(id, ready_event)) for id in range(1, 11)],
-        ]
+        tg.create_task(init(ready_event))
+        for id in range(1, 11):
+            tg.create_task(work(id, ready_event))
 
     print("----- 所有 worker 已完成 -----")
 
@@ -41,6 +40,9 @@ class ApprovalGate:
         self._status = ApprovalStatus.INIT
         self._event = asyncio.Event()
 
+    def _read_status(self) -> ApprovalStatus:
+        return self._status
+
     async def request_approval(self, timeout: float | None = None) -> bool:
         if self._status != ApprovalStatus.INIT:
             raise RuntimeError("审批已在流程中")
@@ -51,7 +53,7 @@ class ApprovalGate:
             async with asyncio.timeout(timeout):
                 await self._event.wait()
 
-                match self._status:
+                match self._read_status():
                     case ApprovalStatus.APPROVE:
                         return True
                     case ApprovalStatus.REJECT:
