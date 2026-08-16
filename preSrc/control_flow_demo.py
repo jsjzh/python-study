@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 Python 控制结构全演示
-涵盖: if/elif/else, for, while, break, continue, pass, 
+涵盖: if/elif/else, for, while, break, continue, pass,
       try/except/else/finally, with, match/case, range() 用法
 """
-
 
 print("=" * 70)
 print("一、条件控制: if / elif / else")
@@ -150,7 +148,7 @@ print("=" * 70)
 # 写法1: for + range(10) —— 最常用
 print("写法1: for i in range(10)  [最常用]")
 for i in range(10):
-    print(f"  第 {i+1}/10 次")
+    print(f"  第 {i + 1}/10 次")
     if i >= 2:  # 只演示前3次，避免输出过多
         print("  ... (省略后续7次)")
         break
@@ -159,7 +157,7 @@ for i in range(10):
 print("\n写法2: while 计数")
 count = 0
 while count < 10:
-    print(f"  第 {count+1}/10 次")
+    print(f"  第 {count + 1}/10 次")
     count += 1
     if count >= 3:
         print("  ... (省略后续7次)")
@@ -206,7 +204,7 @@ for i in range(len(lst)):
 print("  4c. 遍历偶数:     for i in range(0, 10, 2)")
 print("  4d. 遍历奇数:     for i in range(1, 10, 2)")
 print("  4e. 倒序遍历:     for i in range(len(lst)-1, -1, -1)")
-for i in range(len(lst)-1, -1, -1):
+for i in range(len(lst) - 1, -1, -1):
     print(f"    index={i}, value={lst[i]}")
 
 print("\n5. range 转换为其他类型")
@@ -216,7 +214,7 @@ print(f"  set(range(1, 6, 2))  = {set(range(1, 6, 2))}")
 
 print("\n6. range 的特性 (Python 3)")
 r = range(0, 100, 7)
-print(f"  range 是惰性的, 不实际存储所有数字:")
+print("  range 是惰性的, 不实际存储所有数字:")
 print(f"    range(0, 100, 7) 的长度 = {len(r)}")
 print(f"    判断 42 in range(0, 100, 7): {42 in r}")
 print(f"    判断 43 in range(0, 100, 7): {43 in r}")
@@ -288,12 +286,13 @@ with open("temp_demo.txt", "w", encoding="utf-8") as f:
     f.write("自动关闭文件，无需手动 f.close()")
 print("  文件已写入并自动关闭")
 
-with open("temp_demo.txt", "r", encoding="utf-8") as f:
+with open("temp_demo.txt", encoding="utf-8") as f:
     content = f.read()
 print(f"  读取内容: {content.strip()}")
 
 # 使用后清理文件
 import os
+
 os.remove("temp_demo.txt")
 print("  临时文件已清理")
 

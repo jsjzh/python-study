@@ -1,17 +1,16 @@
 import asyncio
-from collections.abc import Awaitable, Callable
-from contextlib import nullcontext
-from dataclasses import dataclass
 import dataclasses
-from enum import Enum
 import functools
 import json
-from os import path
 import os
-import time
-from typing import Any, Coroutine, ParamSpec, TypeVar
 import random
-from typing import List
+import time
+from collections.abc import Callable, Coroutine
+from contextlib import nullcontext
+from dataclasses import dataclass
+from enum import Enum
+from os import path
+from typing import Any, ParamSpec, TypeVar
 
 base = path.join(os.getcwd(), "src", "python_study")
 
@@ -63,7 +62,7 @@ def inline_timer(fun_name: str = "") -> Callable[..., None]:
     return end
 
 
-def atimer(
+def atimer[**P, R](
     afunc: Callable[P, Coroutine[Any, Any, R]],
 ) -> Callable[P, Coroutine[Any, Any, R]]:
 
@@ -78,7 +77,7 @@ def atimer(
     return wrapper
 
 
-def timer(func: Callable[P, R]) -> Callable[P, R]:
+def timer[**P, R](func: Callable[P, R]) -> Callable[P, R]:
 
     @functools.wraps(func)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -117,8 +116,8 @@ async def fake_fetch(
 
                 print(f"[{index}] ✅ 下载完成")
                 return f"data_{index}"
-        except TimeoutError:
-            raise TimeoutError(f"[{index}] TimeoutError trigger, >{timeout}s")
+        except TimeoutError as err:
+            raise TimeoutError(f"[{index}] TimeoutError trigger, >{timeout}s") from err
 
 
 class FetchStatus(Enum):
@@ -172,7 +171,7 @@ async def safe_fake_fetch(
     )
 
 
-def split_string_randomly(s: str, n: int) -> List[str]:
+def split_string_randomly(s: str, n: int) -> list[str]:
     """
     将一个字符串随机分割成包含 N 个元素的列表。
 
@@ -194,11 +193,11 @@ def split_string_randomly(s: str, n: int) -> List[str]:
         )
 
     # 在 [1, len(s)] 中随机选 n-1 个不重复的切割位置
-    cut_points: List[int] = sorted(random.sample(range(1, len(s) + 1), n - 1))
+    cut_points: list[int] = sorted(random.sample(range(1, len(s) + 1), n - 1))
 
     # 加上首尾边界，依次切片
-    boundaries: List[int] = [0] + cut_points + [len(s)]
-    result: List[str] = [s[boundaries[i] : boundaries[i + 1]] for i in range(n)]
+    boundaries: list[int] = [0, *cut_points, len(s)]
+    result: list[str] = [s[boundaries[i] : boundaries[i + 1]] for i in range(n)]
 
     return result
 
@@ -259,4 +258,4 @@ def cpu_bound(n: int) -> int:
 
 
 def wrapper_cpu_bound(nums: list[int]) -> list[tuple[int, int]]:
-    return list(zip(nums, [cpu_bound(num) for num in nums]))
+    return list(zip(nums, [cpu_bound(num) for num in nums], strict=True))

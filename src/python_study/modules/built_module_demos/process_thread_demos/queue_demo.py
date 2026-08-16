@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from multiprocessing import Queue
 import multiprocessing
+from multiprocessing import Queue
 
 
 def def_of_child(q: Queue[str]) -> None:

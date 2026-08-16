@@ -1,8 +1,8 @@
 import asyncio
+import random
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
-import random
 
 
 class CrawlStatus(Enum):
@@ -28,7 +28,7 @@ class CrawlResult:
     retries: int
 
 
-class AsyncRateLimitedCrawler(object):
+class AsyncRateLimitedCrawler:
     def __init__(
         self,
         sem_count: int,
@@ -70,7 +70,7 @@ class AsyncRateLimitedCrawler(object):
                 url=task.url,
                 status=CrawlStatus.CANCELLED,
                 body=None,
-                error=f"fetch error cancel",
+                error="fetch error cancel",
                 retries=0,
             )
 
@@ -87,7 +87,7 @@ class AsyncRateLimitedCrawler(object):
                             url=task.url,
                             status=CrawlStatus.FAILED,
                             body=None,
-                            error=f"fetch error retry limit",
+                            error="fetch error retry limit",
                             retries=pre_task.retries,
                         )
 
@@ -102,16 +102,14 @@ class AsyncRateLimitedCrawler(object):
 
                 try:
                     async with asyncio.timeout(self._timeout):
-                        await asyncio.sleep(
-                            random.uniform(self._min_delay, self._max_delay)
-                        )
+                        await asyncio.sleep(random.uniform(self._min_delay, self._max_delay))
                         if fail:
                             return CrawlResult(
                                 task_id=task.task_id,
                                 url=task.url,
                                 status=CrawlStatus.FAILED,
                                 body=None,
-                                error=f"fetch error fail",
+                                error="fetch error fail",
                                 retries=pre_task.retries + 1 if pre_task else 0,
                             )
                         else:
@@ -129,7 +127,7 @@ class AsyncRateLimitedCrawler(object):
                         url=task.url,
                         status=CrawlStatus.TIMEOUT,
                         body=None,
-                        error=f"fetch error timeout",
+                        error="fetch error timeout",
                         retries=pre_task.retries + 1 if pre_task else 0,
                     )
         except asyncio.CancelledError:
@@ -138,7 +136,7 @@ class AsyncRateLimitedCrawler(object):
                 url=task.url,
                 status=CrawlStatus.CANCELLED,
                 body=None,
-                error=f"fetch error cancel",
+                error="fetch error cancel",
                 retries=pre_task.retries + 1 if pre_task else 0,
             )
 
@@ -152,14 +150,11 @@ class AsyncRateLimitedCrawler(object):
 
         try:
             while pending and attempts <= self._retry_count:
-
                 if self._cancelled:
                     break
 
                 batch: list[asyncio.Task[CrawlResult]] = [
-                    asyncio.create_task(
-                        self._fetch(t, fail=random.choice([False, True]))
-                    )
+                    asyncio.create_task(self._fetch(t, fail=random.choice([False, True])))
                     for t in pending
                 ]
 

@@ -1,9 +1,10 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 import hashlib
 import multiprocessing
 import random
 import time
+from dataclasses import dataclass
 
 from python_study.utils import timer
 
@@ -16,9 +17,7 @@ def compute_hash(data: str) -> str:
 @timer
 def pool_map_compute_hash() -> None:
     with multiprocessing.Pool(processes=3) as result:
-        results = result.map(
-            compute_hash, [f"image_{index:03d}" for index in range(1, 11)]
-        )
+        results = result.map(compute_hash, [f"image_{index:03d}" for index in range(1, 11)])
 
     for result in results:
         print(f"{result}")
@@ -72,9 +71,7 @@ def risky_process(name: str) -> str:
 def pool_apply_async_risky_process() -> None:
 
     with multiprocessing.Pool(processes=3) as pool:
-        async_results = [
-            pool.apply_async(risky_process, args=(f"task_{i}",)) for i in range(1, 6)
-        ]
+        async_results = [pool.apply_async(risky_process, args=(f"task_{i}",)) for i in range(1, 6)]
         for ar in async_results:
             try:
                 print(ar.get(timeout=5))

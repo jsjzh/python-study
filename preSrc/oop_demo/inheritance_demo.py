@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 四、继承与多态
 """
@@ -14,6 +13,7 @@ def demo():
 
     class Animal:
         """父类 (基类)"""
+
         kingdom = "动物界"
 
         def __init__(self, name, age):
@@ -31,6 +31,7 @@ def demo():
 
     class Dog(Animal):
         """子类：继承 Animal"""
+
         species = "犬科"
 
         def bark(self):
@@ -41,12 +42,12 @@ def demo():
 
     dog = Dog("旺财", 3)
     print(f"    dog = {dog}")
-    dog.eat()       # 继承自 Animal
-    dog.sleep()     # 继承自 Animal
-    dog.bark()      # Dog 自己的方法
-    dog.fetch()     # Dog 自己的方法
+    dog.eat()  # 继承自 Animal
+    dog.sleep()  # 继承自 Animal
+    dog.bark()  # Dog 自己的方法
+    dog.fetch()  # Dog 自己的方法
     print(f"    dog.kingdom = {dog.kingdom}")  # 继承的类变量
-    print(f"    dog.species = {dog.species}")    # Dog 的类变量
+    print(f"    dog.species = {dog.species}")  # Dog 的类变量
 
     # ========== 2. 方法覆盖 (Override) ==========
     print("\n--- 2. 方法覆盖 (Override) ---")
@@ -69,8 +70,8 @@ def demo():
 
     cat = Cat("咪咪", 2, indoor=True)
     print(f"    cat = {cat}")
-    cat.eat()       # 调用的是 Cat 覆盖后的版本
-    cat.sleep()     # 仍然是 Animal 的版本
+    cat.eat()  # 调用的是 Cat 覆盖后的版本
+    cat.sleep()  # 仍然是 Animal 的版本
 
     # ========== 3. super() 的使用 ==========
     print("\n--- 3. super() 的使用 ---")
@@ -155,6 +156,7 @@ def demo():
 
     class Shape:
         """抽象基类"""
+
         def area(self):
             raise NotImplementedError("子类必须实现 area()")
 
@@ -167,7 +169,8 @@ def demo():
 
         def area(self):
             import math
-            return math.pi * self.radius ** 2
+
+            return math.pi * self.radius**2
 
         def name(self):
             return "圆"
@@ -213,8 +216,8 @@ def demo():
     print(f"    isinstance(dog, Dog):      {isinstance(dog, Dog)}")
     print(f"    isinstance(dog, Animal):   {isinstance(dog, Animal)}")  # True!
     print(f"    type(dog) is Dog:          {type(dog) is Dog}")
-    print(f"    type(dog) is Animal:       {type(dog) is Animal}")   # False!
-    print(f"    isinstance 检查继承链，type 只检查精确类型")
+    print(f"    type(dog) is Animal:       {type(dog) is Animal}")  # False!
+    print("    isinstance 检查继承链，type 只检查精确类型")
 
     # ========== 8. 抽象基类 ==========
     print("\n--- 8. 抽象基类 (ABC) ---")
@@ -256,7 +259,7 @@ def demo():
     print(f"    isinstance(alipay, Payment): {isinstance(alipay, Payment)}")
 
     # 尝试实例化抽象类会报错
-    print(f"    Payment() 会报 TypeError! (抽象类不能直接实例化)")
+    print("    Payment() 会报 TypeError! (抽象类不能直接实例化)")
 
 
 if __name__ == "__main__":

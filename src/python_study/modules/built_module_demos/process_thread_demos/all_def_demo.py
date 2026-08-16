@@ -1,8 +1,8 @@
 """对比三种并发模型处理 CPU 密集 vs IO 密集任务的性能差异"""
 
 import asyncio
-import threading
 import multiprocessing
+import threading
 import time
 
 
@@ -42,9 +42,7 @@ def run_thread_cpu() -> None:
 # ========== 3. multiprocessing（CPU 密集 → 绕开 GIL） ==========
 def run_process_cpu() -> None:
     start = time.perf_counter()
-    procs = [
-        multiprocessing.Process(target=cpu_heavy, args=(5_000_000,)) for _ in range(4)
-    ]
+    procs = [multiprocessing.Process(target=cpu_heavy, args=(5_000_000,)) for _ in range(4)]
     for p in procs:
         p.start()
     for p in procs:

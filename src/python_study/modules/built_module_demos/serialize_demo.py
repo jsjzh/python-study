@@ -36,7 +36,7 @@ def serialize_json():
 
 def read_serialize_json():
     file_path = get_assets_path(paths=["index.md"])
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         print("----- json.load(f) -----", json.load(f))
 
 

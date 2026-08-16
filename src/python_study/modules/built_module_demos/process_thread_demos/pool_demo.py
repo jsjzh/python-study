@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import multiprocessing
 
 
@@ -10,7 +11,7 @@ def main() -> None:
     with multiprocessing.Pool(processes=3) as pool:
         results = pool.starmap(square, [(num, num) for num in range(1, 11)])
 
-    for num, result in zip(range(1, 11), results):
+    for num, result in zip(range(1, 11), results, strict=True):
         print(f"{num}² = {result}")
 
 

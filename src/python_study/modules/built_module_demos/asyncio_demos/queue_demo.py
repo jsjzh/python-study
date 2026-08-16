@@ -1,6 +1,6 @@
 import asyncio
-from enum import Enum
 import json
+from enum import Enum
 
 from python_study.utils import StreamData, fake_sse_producer
 
@@ -45,7 +45,7 @@ class MessageStatus(Enum):
     STOPPED = "stopped"
 
 
-class MessageProcessor(object):
+class MessageProcessor:
     def __init__(self, maxsize: int = 10) -> None:
         self._maxsize: int = maxsize
         self._q: asyncio.Queue = asyncio.Queue(maxsize=maxsize)
@@ -63,7 +63,7 @@ class MessageProcessor(object):
                 else:
                     break
             except Exception as error:
-                raise RuntimeError(f"worker error") from error
+                raise RuntimeError("worker error") from error
             finally:
                 self._q.task_done()
 
@@ -101,7 +101,7 @@ class MessageProcessor(object):
 
 
 async def run2() -> None:
-    mp = MessageProcessor(maxsize=5)
+    MessageProcessor(maxsize=5)
 
 
 def main() -> None:

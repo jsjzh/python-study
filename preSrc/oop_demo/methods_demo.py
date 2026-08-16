@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 二、方法的三种类型：实例方法、类方法、静态方法
 """
@@ -76,14 +75,14 @@ def demo():
     print("\n2) 类方法 (Class Method)")
     mu3 = MathUtils.from_string("值=42")
     print(f"   MathUtils.from_string('值=42') -> value={mu3.value}")
-    MathUtils.info()       # 通过类调用
-    mu1.info()             # 通过实例也能调用 (但通常通过类调用)
+    MathUtils.info()  # 通过类调用
+    mu1.info()  # 通过实例也能调用 (但通常通过类调用)
 
     print("\n3) 静态方法 (Static Method)")
     print(f"   MathUtils.is_positive(5) = {MathUtils.is_positive(5)}")
     print(f"   MathUtils.is_positive(-3) = {MathUtils.is_positive(-3)}")
     MathUtils.help()
-    mu1.help()             # 也可以通过实例调用
+    mu1.help()  # 也可以通过实例调用
 
     # ========== 对比总结 ==========
     print("\n4) 三种方法对比总结")
@@ -142,7 +141,9 @@ def demo():
     print(f"   reverse('Python')    = {StringHelper.reverse('Python')}")
     print(f"   is_palindrome('aba') = {StringHelper.is_palindrome('aba')}")
     print(f"   is_palindrome('abc') = {StringHelper.is_palindrome('abc')}")
-    print(f"   word_count('Hello World from OOP') = {StringHelper.word_count('Hello World from OOP')}")
+    print(
+        f"   word_count('Hello World from OOP') = {StringHelper.word_count('Hello World from OOP')}"
+    )
 
 
 if __name__ == "__main__":

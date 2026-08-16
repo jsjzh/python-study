@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Python 函数全演示
 涵盖: 函数定义/调用、各种参数写法、lambda匿名函数、闭包、局部/全局变量、递归等
 """
 
-from typing import Any, Callable, Optional
-
+from collections.abc import Callable
 
 print("=" * 70)
 print("一、函数基础: 定义与调用")
@@ -85,7 +83,7 @@ print("\n3. 默认参数: 调用时可以省略，使用默认值")
 
 
 def power(base: int, exp: int = 2) -> int:
-    return base ** exp
+    return base**exp
 
 
 print(f"  power(3)       = {power(3)}          (exp 默认 2, 计算 3**2)")
@@ -103,6 +101,7 @@ def append_to_list(value, target=[]):
 
 print(f"  第一次调用: {append_to_list(1)}")
 print(f"  第二次调用: {append_to_list(2)}   (默认列表被污染了!)")
+
 
 # 正确写法
 def append_to_list_safe(value, target=None):
@@ -176,7 +175,7 @@ def configure(*, host="127.0.0.1", port=8080, debug=False):
 
 print(f"  configure()                           -> {configure()}")
 print(f"  configure(port=3306)                  -> {configure(port=3306)}")
-print(f"  configure('localhost')                -> 报错! 只能用关键字传递")
+print("  configure('localhost')                -> 报错! 只能用关键字传递")
 
 # 9. 位置参数仅限 (Positional-Only Arguments) — Python 3.8+
 print("\n9. 位置参数仅限: 只能位置传递，不能用关键字 (用 / 分隔)")
@@ -187,7 +186,7 @@ def divide_pos_only(a, b, /):
 
 
 print(f"  divide_pos_only(10, 2)     = {divide_pos_only(10, 2)}")
-print(f"  divide_pos_only(a=10, b=2) -> 报错! 只能位置传递")
+print("  divide_pos_only(a=10, b=2) -> 报错! 只能位置传递")
 
 # 10. 参数解包
 print("\n10. 参数解包: 把列表/字典拆开传给函数")
@@ -228,8 +227,8 @@ print("=" * 70)
 
 # 基本语法: lambda 参数: 表达式
 print("1. 基本语法: lambda 参数: 表达式 (只能包含一个表达式)")
-square = lambda x: x ** 2
-print(f"  square = lambda x: x**2")
+square = lambda x: x**2
+print("  square = lambda x: x**2")
 print(f"  square(5) = {square(5)}")
 
 # 多参数
@@ -268,6 +267,7 @@ evens = list(filter(lambda x: x % 2 == 0, nums))
 print(f"  filter: {nums} -> {evens} (偶数)")
 
 from functools import reduce
+
 total = reduce(lambda a, b: a + b, nums)
 print(f"  reduce: {nums} 求和 = {total}")
 
@@ -293,7 +293,7 @@ print("  ❌ 可读性差，复杂逻辑请用 def")
 # 错误示例 (演示局限)
 # bad_lambda = lambda x: if x > 0: print(x)  # SyntaxError!
 ok_lambda = lambda x: "正数" if x > 0 else "非正数"
-print(f"  ✅ 可以用三元表达式: lambda x: '正数' if x > 0 else '非正数'")
+print("  ✅ 可以用三元表达式: lambda x: '正数' if x > 0 else '非正数'")
 print(f"     ok_lambda(5) = {ok_lambda(5)}")
 print(f"     ok_lambda(-3) = {ok_lambda(-3)}")
 
@@ -331,14 +331,16 @@ print("\n2. 闭包应用: 生成特定功能的函数")
 
 def make_validator(min_val, max_val):
     """生成一个验证函数，检查值是否在范围内"""
+
     def validate(value):
         return min_val <= value <= max_val
+
     return validate
 
 
 age_validator = make_validator(0, 150)
-print(f"  age_validator(25)  = {age_validator(25)}")   # True
-print(f"  age_validator(-1)  = {age_validator(-1)}")   # False
+print(f"  age_validator(25)  = {age_validator(25)}")  # True
+print(f"  age_validator(-1)  = {age_validator(-1)}")  # False
 print(f"  age_validator(200) = {age_validator(200)}")  # False
 
 score_validator = make_validator(0, 100)
@@ -356,6 +358,7 @@ def timer_decorator(func):
         elapsed = time.time() - start
         print(f"  函数 {func.__name__} 耗时 {elapsed:.6f} 秒")
         return result
+
     return wrapper
 
 
@@ -369,6 +372,7 @@ print(f"  slow_add(3, 5) = {slow_add(3, 5)}")
 
 # 4. 闭包 vs 类
 print("\n4. 闭包 vs 类: 都能保存状态")
+
 
 # 用闭包实现
 def make_account_balance(initial=0):
@@ -414,7 +418,7 @@ print("\n1. 局部变量: 函数内部定义，仅函数内有效")
 def show_local():
     local_var = "我是局部变量"
     print(f"  函数内: local_var = {local_var}")
-    print(f"  只能在函数内访问")
+    print("  只能在函数内访问")
 
 
 show_local()
@@ -483,8 +487,8 @@ outer()
 
 # 7. globals() 和 locals() 函数
 print("\n6. 查看作用域中的所有变量")
-print(f"  globals() 包含: 'global_var', 'count', 'name' ...")
-print(f"  locals() 在不同位置结果不同")
+print("  globals() 包含: 'global_var', 'count', 'name' ...")
+print("  locals() 在不同位置结果不同")
 
 sample = "demo"
 print(f"  当前模块 locals() keys: {list(locals().keys())[:10]}...")
@@ -567,7 +571,7 @@ def calculate_bmi(weight: float, height: float) -> float:
     Returns:
         BMI 值
     """
-    return weight / (height ** 2)
+    return weight / (height**2)
 
 
 print(f"  BMI(70kg, 1.75m) = {calculate_bmi(70, 1.75):.1f}")
@@ -578,6 +582,7 @@ print("\n2. 获取函数信息")
 print(f"  函数名: {add.__name__}")
 print(f"  函数默认值: {power.__defaults__}")
 import inspect
+
 print(f"  函数签名: {inspect.signature(configure)}")
 
 # 3. 函数缓存 (lru_cache)
@@ -592,7 +597,6 @@ def fib_cached(n: int) -> int:
     return fib_cached(n - 1) + fib_cached(n - 2)
 
 
-import time
 start = time.time()
 result = fib_cached(30)
 elapsed = time.time() - start

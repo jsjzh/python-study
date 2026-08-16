@@ -1,8 +1,8 @@
-from multiprocessing import Pool, Process
 import os
 import random
 import subprocess
 import time
+from multiprocessing import Pool, Process
 
 
 def task(index):

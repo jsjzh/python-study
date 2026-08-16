@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 一、类的基础：实例变量 vs 类变量
 """
@@ -15,8 +14,8 @@ def demo():
         species = "犬科"  # 类变量：所有狗共享同一个值
 
         def __init__(self, name, age):
-            self.name = name   # 实例变量：每个实例独立
-            self.age = age     # 实例变量：每个实例独立
+            self.name = name  # 实例变量：每个实例独立
+            self.age = age  # 实例变量：每个实例独立
 
     dog1 = Dog("旺财", 3)
     dog2 = Dog("小黑", 5)
@@ -29,13 +28,13 @@ def demo():
 
     # 修改类变量：所有实例都会看到变化
     Dog.species = "Canine (犬科)"
-    print(f"\n   修改 Dog.species 后:")
+    print("\n   修改 Dog.species 后:")
     print(f"   dog1.species = {dog1.species}")
     print(f"   dog2.species = {dog2.species}")
 
     # 修改实例变量：只影响该实例
     dog1.name = "大黄"
-    print(f"\n   修改 dog1.name 后:")
+    print("\n   修改 dog1.name 后:")
     print(f"   dog1.name = {dog1.name}")
     print(f"   dog2.name = {dog2.name}")
 
@@ -47,6 +46,7 @@ def demo():
 
     # 3. 变量查找顺序：实例 -> 类 -> 父类
     print("\n3) 变量查找顺序: 实例 -> 类 -> 父类")
+
     class Cat(Dog):
         pass
 
@@ -56,6 +56,7 @@ def demo():
 
     # 4. 可变类变量的陷阱
     print("\n4) ⚠️ 可变类变量陷阱")
+
     class Counter:
         count = []  # 危险！所有实例共享同一个列表
 
@@ -83,6 +84,7 @@ def demo():
 
     # 5. __init__ 初始化方法
     print("\n5) __init__ 初始化方法")
+
     class Point:
         def __init__(self, x=0, y=0):
             self.x = x
@@ -100,13 +102,14 @@ def demo():
 
     # 6. self 的含义
     print("\n6) self 的含义：指向当前实例")
+
     class Exampler:
         def show(self):
             print(f"   self 就是实例本身, type(self) = {type(self).__name__}")
 
     ex = Exampler()
     ex.show()
-    print(f"   ex.show() 等价于 Exampler.show(ex)")
+    print("   ex.show() 等价于 Exampler.show(ex)")
     Exampler.show(ex)
 
 

@@ -14,11 +14,11 @@ asyncio 期末考题：AsyncRateLimitedCrawler
 """
 
 import asyncio
+import random
+import time
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
-import random
-import time
 from typing import Protocol
 
 
@@ -205,8 +205,7 @@ class AsyncRateLimitedCrawler:
             if attempt < self._max_retries:
                 backoff = 0.5 * (2**attempt)
                 print(
-                    f"[{task.task_id}] ❌ {result.error}，"
-                    f"{backoff}s 后第 {attempt + 2} 次重试"
+                    f"[{task.task_id}] ❌ {result.error}，{backoff}s 后第 {attempt + 2} 次重试"
                 )
                 try:
                     await asyncio.wait_for(self._cancel_event.wait(), timeout=backoff)
@@ -221,7 +220,7 @@ class AsyncRateLimitedCrawler:
                     retries=attempt + 1,
                 )
 
-        return result
+        return result # type: ignore
 
     async def crawl(self, tasks: Iterable[CrawlTask]) -> list[CrawlResult]:
         """并发爬取全部任务，返回结构化结果列表；重复调用会重置内部状态。"""
@@ -237,7 +236,7 @@ class AsyncRateLimitedCrawler:
         raw = await asyncio.gather(*self._tasks, return_exceptions=True)
 
         results: list[CrawlResult] = []
-        for task, outcome in zip(task_list, raw):
+        for task, outcome in zip(task_list, raw, strict=True):
             if isinstance(outcome, CrawlResult):
                 results.append(outcome)
             elif isinstance(outcome, asyncio.CancelledError):

@@ -13,16 +13,10 @@ async def run() -> None:
         tasks = [tg.create_task(safe_fake_fetch(index=index, sem=sem)) for index in ids]
 
     success_count = sum([1 for task in tasks if task.result().status == FetchStatus.OK])
-    timeout_count = sum(
-        [1 for task in tasks if task.result().status == FetchStatus.TIMEOUT]
-    )
-    error_count = sum(
-        [1 for task in tasks if task.result().status == FetchStatus.ERROR]
-    )
+    timeout_count = sum([1 for task in tasks if task.result().status == FetchStatus.TIMEOUT])
+    error_count = sum([1 for task in tasks if task.result().status == FetchStatus.ERROR])
     success_time = [
-        task.result().duration
-        for task in tasks
-        if task.result().status == FetchStatus.OK
+        task.result().duration for task in tasks if task.result().status == FetchStatus.OK
     ]
     success_avg_time = mean(success_time) if success_time else 0.0
 

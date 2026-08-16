@@ -1,4 +1,3 @@
-from python_study.modules.llm_demos import sse_demo, qwen_demo
 from python_study.modules.built_module_demos import (
     asyncio_demo,
     asyncio_demos,
@@ -8,12 +7,13 @@ from python_study.modules.built_module_demos import (
     date_time_demo,
     hash_demo,
     itertools_demo,
+    process_demo,
     process_thread_demos,
     reg_demo,
-    process_demo,
     serialize_demo,
     urllib_demo,
 )
+from python_study.modules.llm_demos import qwen_demo, sse_demo
 from python_study.modules.third_module_demos import (
     chardet_demo,
     pillow_demo,

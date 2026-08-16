@@ -1,8 +1,8 @@
 import asyncio
-from collections.abc import Awaitable, Callable
 import functools
 import json
 import random
+from collections.abc import Awaitable, Callable
 from typing import ParamSpec, TypeVar
 
 P = ParamSpec("P")
@@ -13,7 +13,7 @@ def retry_async(
     max_retries: int = 3, base_delay: float = 0.5, timeout: float | None = None
 ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[R]]]:
     if max_retries < 0:
-        raise ValueError(f"max_retries 必须大于等于 0")
+        raise ValueError("max_retries 必须大于等于 0")
 
     def wrap_wrapper(afunc: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
 
@@ -36,9 +36,7 @@ def retry_async(
                     )
                     await asyncio.sleep(delay)
 
-            raise RuntimeError(
-                "unreachable: retry loop exited without returning or raising"
-            )
+            raise RuntimeError("unreachable: retry loop exited without returning or raising")
 
         return wrapper
 

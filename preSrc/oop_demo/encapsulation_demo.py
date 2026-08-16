@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 五、封装与 @property
 """
@@ -17,9 +16,9 @@ def demo():
 
     class BankAccount:
         def __init__(self, owner, balance=0):
-            self.owner = owner          # 公开
-            self._balance = balance     # 约定内部使用
-            self.__secret = "密钥123"   # 名称改写
+            self.owner = owner  # 公开
+            self._balance = balance  # 约定内部使用
+            self.__secret = "密钥123"  # 名称改写
 
         def deposit(self, amount):
             self._balance += amount
@@ -35,7 +34,7 @@ def demo():
     print(f"    account._balance = {account._balance}  (单下划线，可访问但约定不)")
 
     # 双下划线名称改写
-    print(f"    account.__secret 直接访问会报错!")
+    print("    account.__secret 直接访问会报错!")
     print(f"    account._BankAccount__secret = {account._BankAccount__secret}")
 
     # ========== 2. @property 属性装饰器 ==========
@@ -54,19 +53,21 @@ def demo():
         def area(self):
             """只读属性: 面积"""
             import math
-            return math.pi * self._radius ** 2
+
+            return math.pi * self._radius**2
 
         @property
         def circumference(self):
             """只读属性: 周长"""
             import math
+
             return 2 * math.pi * self._radius
 
     c = Circle(5)
     print(f"    c.radius = {c.radius}")
     print(f"    c.area = {c.area:.2f}")
     print(f"    c.circumference = {c.circumference:.2f}")
-    print(f"    c.area = 50  -> AttributeError! 只读属性不能赋值")
+    print("    c.area = 50  -> AttributeError! 只读属性不能赋值")
 
     # ========== 3. 带 setter 的 property ==========
     print("\n--- 3. 带 setter 的 property ---")
@@ -176,11 +177,11 @@ def demo():
 
     product = Product("商品", 100, discount=0.2)
     print(f"    原价: ¥{product.price}")
-    print(f"    折扣: {product.discount*100}%")
+    print(f"    折扣: {product.discount * 100}%")
     print(f"    最终价: ¥{product.final_price:.2f}")
 
     product.final_price = 75
-    print(f"    设置最终价¥75后: 折扣={product.discount*100:.1f}%, 原价={product.price}")
+    print(f"    设置最终价¥75后: 折扣={product.discount * 100:.1f}%, 原价={product.price}")
 
     # ========== 6. @property 的实际优势 ==========
     print("\n--- 6. @property 实际优势 ---")
@@ -192,6 +193,7 @@ def demo():
 
     class UserProfile:
         """演示：从普通属性迁移到 property"""
+
         def __init__(self, name):
             # 第一版: self.name = name
             # 第二版: 改为 property 而不改变外部接口

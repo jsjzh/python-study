@@ -1,7 +1,7 @@
 from contextlib import contextmanager
 
 
-class Query(object):
+class Query:
     def __init__(self, name):
         self.name = name
 

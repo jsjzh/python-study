@@ -1,7 +1,7 @@
 import types
 
 
-class Student(object):
+class Student:
     def __init__(self, name, age):
         self.name = name
         self.age = age
@@ -26,7 +26,7 @@ obj = {"name": "king"}
 print(isinstance(obj, object))
 
 print(hasattr(stu, "name"))
-print(getattr(stu, "name"))
+print(stu.name)
 
 # print(hasattr(obj, "name"))
 # print(getattr(obj, "name"))

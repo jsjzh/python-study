@@ -1,12 +1,10 @@
 # from functools import reduce
-from ast import arg
+import os
 from collections.abc import Iterable
 from dataclasses import dataclass
-import os
-import typing
-import numpy as np
 
 import my_module
+import numpy as np
 from my_module.hello import my_module_hello
 
 # multi_line_string = """
@@ -168,8 +166,9 @@ from my_module.hello import my_module_hello
 log = [("user1", 2), ("user2", 7), ("user1", 3), ("user2", 5)]
 
 
-from typing import Callable, ParamSpec, TypeVar, TypedDict
+from collections.abc import Callable
 from functools import partial, reduce
+from typing import ParamSpec, TypeVar
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -537,7 +536,8 @@ else:
     print("测试失败!")
 
 
-import time, functools
+import functools
+import time
 
 
 def metric(fn):
@@ -565,9 +565,7 @@ def slow(x, y, z):
 
 f = fast(11, 22)
 s = slow(11, 22, 33)
-if f != 33:
-    print("测试失败!")
-elif s != 7986:
+if f != 33 or s != 7986:
     print("测试失败!")
 
 

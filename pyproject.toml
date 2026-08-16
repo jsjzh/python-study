@@ -26,3 +26,33 @@ dev = "python_study.dev:main"
 [build-system]
 requires = ["uv_build>=0.12.1,<0.13.0"]
 build-backend = "uv_build"
+
+[tool.ruff]
+target-version = "py312"
+extend-exclude = [
+    "node_modules", # 你的前端项目目录
+    "dist",
+    "preSrc",
+]
+
+[tool.ruff.lint]
+select = [
+    "F",   # pyflakes：未使用变量/import、未定义变量等
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "I",   # isort：import 排序
+    "N",   # pep8-naming：命名规范
+    "UP",  # pyupgrade：自动升级旧语法
+    "B",   # flake8-bugbear：常见 bug 模式
+    "SIM", # flake8-simplify：简化写法
+    "RUF", # ruff 自有规则
+]
+ignore = ["RUF001", "RUF002", "RUF003", "F401", "E501"]
+
+
+[tool.ruff.lint.isort]
+known-first-party = ["python-study"] # 改成你的包名，没有就先删这行
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

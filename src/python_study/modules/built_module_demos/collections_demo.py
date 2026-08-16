@@ -21,9 +21,7 @@ def main():
     print("----- nt -----", nt)
     print("----- nt(123,456) -----", nt(123, 456))
     print("----- type(nt(123, 456)) -----", type(nt(123, 456)))
-    print(
-        "----- isinstance(nt(123, 456), tuple) -----", isinstance(nt(123, 456), tuple)
-    )
+    print("----- isinstance(nt(123, 456), tuple) -----", isinstance(nt(123, 456), tuple))
 
     de = deque(["a", "b", "c"])
     print("----- de -----", de)

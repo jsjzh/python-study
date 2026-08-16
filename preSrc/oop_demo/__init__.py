@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 oop_demo 包 - Python 面向对象编程全演示
 

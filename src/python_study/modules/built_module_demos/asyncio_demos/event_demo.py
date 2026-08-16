@@ -9,9 +9,9 @@ async def work(id: int, ready_event: asyncio.Event) -> None:
 
 
 async def init(ready_event: asyncio.Event) -> None:
-    print(f"----- 初始化中 -----")
+    print("----- 初始化中 -----")
     await asyncio.sleep(2)
-    print(f"----- 初始化完成 -----")
+    print("----- 初始化完成 -----")
     ready_event.set()
 
 
@@ -19,12 +19,12 @@ async def run() -> None:
     ready_event = asyncio.Event()
 
     async with asyncio.TaskGroup() as tg:
-        tasks = [
+        [
             tg.create_task(init(ready_event)),
             *[tg.create_task(work(id, ready_event)) for id in range(1, 11)],
         ]
 
-    print(f"----- 所有 worker 已完成 -----")
+    print("----- 所有 worker 已完成 -----")
 
 
 class ApprovalStatus(Enum):
@@ -35,7 +35,7 @@ class ApprovalStatus(Enum):
     TIMEOUT = "timeout"
 
 
-class ApprovalGate(object):
+class ApprovalGate:
     def __init__(self, action: str) -> None:
         self._action = action
         self._status = ApprovalStatus.INIT
@@ -43,7 +43,7 @@ class ApprovalGate(object):
 
     async def request_approval(self, timeout: float | None = None) -> bool:
         if self._status != ApprovalStatus.INIT:
-            raise RuntimeError(f"审批已在流程中")
+            raise RuntimeError("审批已在流程中")
 
         self._status = ApprovalStatus.PENDING
 
@@ -57,7 +57,7 @@ class ApprovalGate(object):
                     case ApprovalStatus.REJECT:
                         return False
                     case _:
-                        raise RuntimeError(f"审批状态错误")
+                        raise RuntimeError("审批状态错误")
         except TimeoutError:
             self._status = ApprovalStatus.TIMEOUT
             self._event.set()
@@ -65,21 +65,21 @@ class ApprovalGate(object):
 
     def approve(self) -> None:
         if self._status != ApprovalStatus.PENDING:
-            raise RuntimeError(f"无法重复审批")
+            raise RuntimeError("无法重复审批")
 
         self._status = ApprovalStatus.APPROVE
         self._event.set()
 
     def reject(self) -> None:
         if self._status != ApprovalStatus.PENDING:
-            raise RuntimeError(f"无法重复审批")
+            raise RuntimeError("无法重复审批")
 
         self._status = ApprovalStatus.REJECT
         self._event.set()
 
 
 async def run2() -> None:
-    ag = ApprovalGate("工作审批")
+    ApprovalGate("工作审批")
 
 
 def main() -> None:

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 三、魔法方法 (Magic Methods / Dunder Methods)
 以双下划线开头和结尾的特殊方法，让自定义类支持 Python 内置操作
@@ -47,9 +46,9 @@ def demo():
             return f"向量 ({self.x}, {self.y})"
 
     v = Vector(3, 4)
-    print(f"  repr(v) = {repr(v)}")
-    print(f"  str(v)  = {str(v)}")
-    print(f"  print(v) = ", end="")
+    print(f"  repr(v) = {v!r}")
+    print(f"  str(v)  = {v!s}")
+    print("  print(v) = ", end="")
     print(v)
 
     # ========== 3. 比较运算 ==========
@@ -127,7 +126,7 @@ def demo():
 
         def __abs__(self):
             """abs() 绝对值"""
-            return (self.real ** 2 + self.imag ** 2) ** 0.5
+            return (self.real**2 + self.imag**2) ** 0.5
 
         def __repr__(self):
             sign = "+" if self.imag >= 0 else "-"
@@ -190,7 +189,7 @@ def demo():
     stack[0] = 100
     print(f"  stack[0]=100后: {stack}")
     print(f"  30 in stack: {30 in stack}")
-    print(f"  遍历: ", end="")
+    print("  遍历: ", end="")
     for item in stack:
         print(item, end=" ")
     print()
@@ -215,6 +214,7 @@ def demo():
     def make_validator(min_val, max_val):
         def validator(value):
             return min_val <= value <= max_val
+
         return validator
 
     age_check = make_validator(0, 150)
@@ -240,7 +240,7 @@ def demo():
             self.connected = False
             if exc_type:
                 print(f"    发生错误: {exc_val}")
-            print(f"    关闭连接")
+            print("    关闭连接")
             return False  # False: 不抑制异常; True: 抑制异常
 
         def query(self, sql):
@@ -269,13 +269,13 @@ def demo():
 
         def __getattr__(self, name):
             """访问不存在的属性时调用"""
-            if name.startswith('_'):
+            if name.startswith("_"):
                 raise AttributeError(name)
             return self._data.get(name, f"<{name} 未定义>")
 
         def __setattr__(self, name, value):
             """设置属性时调用"""
-            if name.startswith('_') or name in ('_data',):
+            if name.startswith("_") or name in ("_data",):
                 super().__setattr__(name, value)
             else:
                 self._data[name] = value

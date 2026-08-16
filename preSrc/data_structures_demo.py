@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Python 数据结构增删改查 (CRUD) 全演示
 涵盖: list, tuple, dict, set, frozenset, str, bytes, bytearray
@@ -33,19 +32,19 @@ print(f"  推导式:  {lst4}")
 
 # 1.2 读取 (Read)
 subsection("读取元素")
-fruits = ['苹果', '香蕉', '橙子', '葡萄', '西瓜']
+fruits = ["苹果", "香蕉", "橙子", "葡萄", "西瓜"]
 print(f"  fruits = {fruits}")
-print(f"  索引 [0]:      {fruits[0]}")       # 第一个
-print(f"  索引 [-1]:     {fruits[-1]}")      # 最后一个
-print(f"  切片 [1:3]:    {fruits[1:3]}")     # 第2~3个
-print(f"  切片 [:3]:     {fruits[:3]}")      # 前3个
-print(f"  切片 [2:]:     {fruits[2:]}")      # 第3个到末尾
-print(f"  切片 [::2]:    {fruits[::2]}")     # 步长2
-print(f"  切片 [::-1]:   {fruits[::-1]}")    # 反转
-print(f"  len():         {len(fruits)}")     # 长度
-print(f"  '苹果' in:     {'苹果' in fruits}") # 成员判断
-print(f"  index('香蕉'): {fruits.index('香蕉')}") # 查找索引
-print(f"  count('苹果'): {fruits.count('苹果')}") # 统计次数
+print(f"  索引 [0]:      {fruits[0]}")  # 第一个
+print(f"  索引 [-1]:     {fruits[-1]}")  # 最后一个
+print(f"  切片 [1:3]:    {fruits[1:3]}")  # 第2~3个
+print(f"  切片 [:3]:     {fruits[:3]}")  # 前3个
+print(f"  切片 [2:]:     {fruits[2:]}")  # 第3个到末尾
+print(f"  切片 [::2]:    {fruits[::2]}")  # 步长2
+print(f"  切片 [::-1]:   {fruits[::-1]}")  # 反转
+print(f"  len():         {len(fruits)}")  # 长度
+print(f"  '苹果' in:     {'苹果' in fruits}")  # 成员判断
+print(f"  index('香蕉'): {fruits.index('香蕉')}")  # 查找索引
+print(f"  count('苹果'): {fruits.count('苹果')}")  # 统计次数
 
 # 遍历
 subsection("遍历列表")
@@ -66,28 +65,28 @@ subsection("添加元素")
 lst = [1, 2]
 print(f"  原始:   {lst}")
 lst.append(3)
-print(f"  append(3):     {lst}")            # 末尾添加
+print(f"  append(3):     {lst}")  # 末尾添加
 lst.insert(0, 0)
-print(f"  insert(0,0):   {lst}")            # 指定位置插入
+print(f"  insert(0,0):   {lst}")  # 指定位置插入
 lst.extend([4, 5])
-print(f"  extend([4,5]): {lst}")            # 批量添加
+print(f"  extend([4,5]): {lst}")  # 批量添加
 lst += [6]
-print(f"  += [6]:        {lst}")            # 拼接
+print(f"  += [6]:        {lst}")  # 拼接
 
 # 1.4 删除 (Delete)
 subsection("删除元素")
 lst = [1, 2, 3, 4, 5, 3]
 print(f"  原始:     {lst}")
 del lst[1]
-print(f"  del [1]:  {lst}")                 # 按索引删除
+print(f"  del [1]:  {lst}")  # 按索引删除
 lst.remove(3)
-print(f"  remove(3):{lst}")                 # 按值删除第一个匹配
+print(f"  remove(3):{lst}")  # 按值删除第一个匹配
 popped = lst.pop()
-print(f"  pop():    {lst}  (弹出:{popped})") # 弹出末尾
+print(f"  pop():    {lst}  (弹出:{popped})")  # 弹出末尾
 popped2 = lst.pop(0)
-print(f"  pop(0):   {lst}  (弹出:{popped2})")# 弹出指定位置
+print(f"  pop(0):   {lst}  (弹出:{popped2})")  # 弹出指定位置
 lst.clear()
-print(f"  clear():  {lst}")                 # 清空
+print(f"  clear():  {lst}")  # 清空
 
 # 1.5 其他常用操作
 subsection("排序/反转/复制")
@@ -103,6 +102,7 @@ nums.reverse()
 print(f"  reverse():{nums}")
 print(f"  .copy():  {nums.copy()}")
 import copy
+
 deep = copy.deepcopy(nums)
 print(f"  deepcopy:{deep}")
 
@@ -127,7 +127,7 @@ print(f"  空元组:     {t5}")
 
 # 2.2 读取
 subsection("读取元素 (与列表相同)")
-t = ('a', 'b', 'c', 'd', 'e')
+t = ("a", "b", "c", "d", "e")
 print(f"  t = {t}")
 print(f"  t[0]:     {t[0]}")
 print(f"  t[-1]:    {t[-1]}")
@@ -161,9 +161,12 @@ print(f"  解包: x={x}, y={y}")
 a, *b, c = (1, 2, 3, 4, 5)
 print(f"  星号解包: a={a}, b={b}, c={c}")
 
+
 # 作为函数返回值
 def get_coords():
     return 10, 20, 30
+
+
 result = get_coords()
 print(f"  返回多值: {result}")
 
@@ -175,77 +178,77 @@ section("三、字典 dict — 键值对映射")
 
 # 3.1 创建
 subsection("创建字典")
-d = {'name': 'Alice', 'age': 25}
+d = {"name": "Alice", "age": 25}
 print(f"  字面量:   {d}")
-d2 = dict(name='Bob', age=30)
+d2 = dict(name="Bob", age=30)
 print(f"  dict():   {d2}")
-d3 = dict([('a', 1), ('b', 2)])
+d3 = dict([("a", 1), ("b", 2)])
 print(f"  列表转:   {d3}")
-d4 = {k: v for k, v in [('x', 10), ('y', 20)]}
+d4 = {k: v for k, v in [("x", 10), ("y", 20)]}
 print(f"  推导式:   {d4}")
 d5 = {}
 print(f"  空字典:   {d5}")
 
 # 3.2 读取
 subsection("读取元素")
-student = {'name': 'Alice', 'age': 25, 'scores': [90, 85, 92]}
+student = {"name": "Alice", "age": 25, "scores": [90, 85, 92]}
 print(f"  student = {student}")
-print(f"  d['name']:       {student['name']}")   # 直接键访问
-print(f"  d.get('age'):    {student.get('age')}") # get 方法
-print(f"  d.get('phone'):  {student.get('phone')}") # 不存在返回 None
-print(f"  d.get('phone','无'): {student.get('phone', '无')}") # 默认值
+print(f"  d['name']:       {student['name']}")  # 直接键访问
+print(f"  d.get('age'):    {student.get('age')}")  # get 方法
+print(f"  d.get('phone'):  {student.get('phone')}")  # 不存在返回 None
+print(f"  d.get('phone','无'): {student.get('phone', '无')}")  # 默认值
 print(f"  'name' in d:     {'name' in student}")  # 检查键
-print(f"  'Alice' in d:    {'Alice' in student}") # 只检查键不检查值
+print(f"  'Alice' in d:    {'Alice' in student}")  # 只检查键不检查值
 
 # 遍历
 subsection("遍历字典")
-print(f"  遍历键:   ", end="")
+print("  遍历键:   ", end="")
 for key in student:
     print(key, end=" ")
 print()
 print(f"  .keys():  {list(student.keys())}")
 print(f"  .values():{list(student.values())}")
-print(f"  .items(): ", end="")
+print("  .items(): ", end="")
 for k, v in student.items():
     print(f"{k}={v}", end="  ")
 print()
 
 # 3.3 修改
 subsection("修改元素")
-d = {'a': 1, 'b': 2, 'c': 3}
+d = {"a": 1, "b": 2, "c": 3}
 print(f"  原始:         {d}")
-d['a'] = 100
+d["a"] = 100
 print(f"  改值:         {d}")
-d['d'] = 4
+d["d"] = 4
 print(f"  加新键:       {d}")
-d.update({'e': 5, 'f': 6})
+d.update({"e": 5, "f": 6})
 print(f"  update():     {d}")
 d.update(g=7)
 print(f"  update(k=v):  {d}")
-d.setdefault('h', 8)
+d.setdefault("h", 8)
 print(f"  setdefault(): {d}  (键不存在才添加)")
-d.setdefault('a', 999)
+d.setdefault("a", 999)
 print(f"  setdefault存在: {d}  (已存在不修改)")
 
 # 3.4 删除
 subsection("删除元素")
-d = {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+d = {"a": 1, "b": 2, "c": 3, "d": 4}
 print(f"  原始:       {d}")
-del d['a']
+del d["a"]
 print(f"  del['a']:   {d}")
-val = d.pop('b')
+val = d.pop("b")
 print(f"  pop('b'):   {d}  (弹出值:{val})")
-val2 = d.pop('z', '默认')
+val2 = d.pop("z", "默认")
 print(f"  pop不存在:  {d}  (默认:{val2})")
-d.setdefault('c', None)
+d.setdefault("c", None)
 print(f"  setdefault: {d}")
 d.clear()
 print(f"  clear():    {d}")
 
 # 3.5 字典合并 (Python 3.5+)
 subsection("字典合并")
-d1 = {'a': 1, 'b': 2}
-d2 = {'c': 3, 'd': 4}
+d1 = {"a": 1, "b": 2}
+d2 = {"c": 3, "d": 4}
 merged = {**d1, **d2}
 print(f"  {{**d1, **d2}}: {merged}")
 merged2 = d1 | d2  # Python 3.9+
@@ -256,7 +259,7 @@ print(f"  d1 |= d2:       {d1_copy}")
 
 # 3.6 有序字典 (Python 3.7+ dict 已保证有序)
 subsection("有序字典 (Python 3.7+)")
-d = {'z': 3, 'a': 1, 'm': 2}
+d = {"z": 3, "a": 1, "m": 2}
 print(f"  插入顺序: {list(d.keys())}")  # 保持插入顺序
 # 按 key 排序
 sorted_by_key = dict(sorted(d.items()))
@@ -277,7 +280,7 @@ s = {1, 2, 3}
 print(f"  字面量:   {s}")
 s2 = set([1, 2, 2, 3])
 print(f"  set():    {s2}  (自动去重)")
-s3 = set('hello')
+s3 = set("hello")
 print(f"  字符串转: {s3}")
 s4 = set()
 print(f"  空集合:   {s4}  (注意: {{}} 是空字典!)")
@@ -286,7 +289,7 @@ print(f"  空集合:   {s4}  (注意: {{}} 是空字典!)")
 subsection("读取 (集合无序，无索引)")
 s = {1, 2, 3, 4, 5}
 print(f"  s = {s}")
-print(f"  遍历:     ", end="")
+print("  遍历:     ", end="")
 for item in s:
     print(item, end=" ")
 print()
@@ -303,8 +306,8 @@ print(f"  A | B  并集: {a | b}")
 print(f"  A & B  交集: {a & b}")
 print(f"  A - B  差集: {a - b}  (A中不在B的)")
 print(f"  A ^ B 对称差: {a ^ b}  (只在A或只在B的)")
-print(f"  A <= B 子集: {a <= {1,2,3,4,5}}")
-print(f"  A >= B 超集: {a >= {3,4}}")
+print(f"  A <= B 子集: {a <= {1, 2, 3, 4, 5}}")
+print(f"  A >= B 超集: {a >= {3, 4}}")
 print(f"  A.isdisjoint({{7,8}}): {a.isdisjoint({7, 8})}")
 
 # 4.3 修改
@@ -349,9 +352,9 @@ section("五、frozenset — 不可变集合")
 subsection("创建 frozenset")
 fs = frozenset([1, 2, 3])
 print(f"  frozenset([1,2,3]): {fs}")
-fs2 = frozenset({1, 2, 2, 3})
+fs2 = frozenset({1, 2, 3})
 print(f"  frozenset({{1,2,2,3}}): {fs2}")
-fs3 = frozenset('abc')
+fs3 = frozenset("abc")
 print(f"  frozenset('abc'):    {fs3}")
 
 # 5.2 读取 (与 set 相同，但不能修改)
@@ -359,7 +362,7 @@ subsection("读取")
 fs = frozenset([1, 2, 3, 4])
 print(f"  len:       {len(fs)}")
 print(f"  3 in fs:   {3 in fs}")
-print(f"  遍历:      ", end="")
+print("  遍历:      ", end="")
 for item in fs:
     print(item, end=" ")
 print()
@@ -372,12 +375,12 @@ print(f"  交集: {a & b}")
 
 # 5.3 不能修改
 subsection("不可修改 (会报错)")
-print(f"  ❌ fs.add(5)   -> AttributeError!")
-print(f"  ❌ fs.remove(1) -> AttributeError!")
+print("  ❌ fs.add(5)   -> AttributeError!")
+print("  ❌ fs.remove(1) -> AttributeError!")
 
 # 5.4 作为字典的键或集合的元素
 subsection("特殊用途: 可哈希，能当键")
-d = {frozenset({1, 2}): 'A', frozenset({3}): 'B'}
+d = {frozenset({1, 2}): "A", frozenset({3}): "B"}
 print(f"  作为 dict 键: {d}")
 s = {frozenset({1, 2}), frozenset({3})}
 print(f"  作为 set 元素: {s}")
@@ -390,12 +393,12 @@ section("六、字符串 str — 有序不可变序列")
 
 # 6.1 创建
 subsection("创建字符串")
-s1 = 'Hello'
+s1 = "Hello"
 s2 = "World"
 s3 = """多行
 字符串"""
 s4 = f"f-string: {42}"
-s5 = r'原始字符串: C:\Users\Admin'
+s5 = r"原始字符串: C:\Users\Admin"
 print(f"  单引号:   {s1}")
 print(f"  双引号:   {s2}")
 print(f"  三引号:   {s3}")
@@ -440,12 +443,12 @@ s = "Hello"
 print(f"  原始:         '{s}'")
 s2 = s + " World"
 print(f"  + 拼接:       '{s2}'")
-s3 = s.replace('l', 'L')
+s3 = s.replace("l", "L")
 print(f"  replace():    '{s3}'")
 s4 = s.upper()
 print(f"  upper():      '{s4}'")
 # 索引修改需要整体重建
-s5 = s[:1] + 'a' + s[2:]
+s5 = s[:1] + "a" + s[2:]
 print(f"  改第2字符:    '{s5}'")
 
 # f-string 格式化
@@ -464,9 +467,9 @@ section("七、bytes — 不可变二进制序列")
 
 # 7.1 创建
 subsection("创建 bytes")
-b1 = b'hello'
+b1 = b"hello"
 print(f"  b'hello':       {b1}")
-b2 = bytes('你好', 'utf-8')
+b2 = bytes("你好", "utf-8")
 print(f"  bytes(str,'utf-8'): {b2}")
 b3 = bytes([72, 101, 108, 108, 111])
 print(f"  bytes([ints]):  {b3}")
@@ -475,12 +478,12 @@ print(f"  bytes(5):       {b4}  (5个零字节)")
 
 # 7.2 读取
 subsection("读取 bytes")
-b = b'hello'
+b = b"hello"
 print(f"  b = {b}")
 print(f"  b[0]:        {b[0]}  (返回整数)")
 print(f"  b[1:4]:      {b[1:4]}")
 print(f"  len(b):      {len(b)}")
-print(f"  遍历:        ", end="")
+print("  遍历:        ", end="")
 for byte in b:
     print(byte, end=" ")
 print()
@@ -488,14 +491,14 @@ print()
 # bytes <-> str 转换
 subsection("bytes <-> str 转换")
 s = "你好世界"
-b = s.encode('utf-8')
+b = s.encode("utf-8")
 print(f"  str -> bytes:   '{s}'.encode() -> {b}")
-s2 = b.decode('utf-8')
+s2 = b.decode("utf-8")
 print(f"  bytes -> str:   {b}.decode() -> '{s2}'")
 
 # 7.3 常用方法
 subsection("常用方法 (类似字符串)")
-b = b'Hello World'
+b = b"Hello World"
 print(f"  upper():      {b.upper()}")
 print(f"  lower():      {b.lower()}")
 print(f"  split(b' '):  {b.split(b' ')}")
@@ -510,9 +513,9 @@ section("八、bytearray — 可变二进制序列")
 
 # 8.1 创建
 subsection("创建 bytearray")
-ba1 = bytearray(b'hello')
+ba1 = bytearray(b"hello")
 print(f"  bytearray(b'hello'): {ba1}")
-ba2 = bytearray('hello', 'utf-8')
+ba2 = bytearray("hello", "utf-8")
 print(f"  bytearray(str):      {ba2}")
 ba3 = bytearray([72, 101])
 print(f"  bytearray([ints]):   {ba3}")
@@ -521,7 +524,7 @@ print(f"  bytearray(5):        {ba4}")
 
 # 8.2 读取 (与 bytes 相同)
 subsection("读取")
-ba = bytearray(b'hello')
+ba = bytearray(b"hello")
 print(f"  ba = {ba}")
 print(f"  ba[0]:    {ba[0]}")
 print(f"  ba[1:4]:  {ba[1:4]}")
@@ -529,15 +532,15 @@ print(f"  len(ba):  {len(ba)}")
 
 # 8.3 修改 (这是它与 bytes 的核心区别!)
 subsection("修改 (可变!)")
-ba = bytearray(b'hello')
+ba = bytearray(b"hello")
 print(f"  原始:              {ba}")
 ba[0] = 74  # 'J'
 print(f"  改字节[0]:         {ba}")
-ba[1:3] = b'EL'
+ba[1:3] = b"EL"
 print(f"  改切片[1:3]:       {ba}")
 ba.append(33)  # '!'
 print(f"  append(33):        {ba}")
-ba.extend(b' PY')
+ba.extend(b" PY")
 print(f"  extend(b' PY'):    {ba}")
 ba.insert(5, 32)  # 空格
 print(f"  insert(5, 32):     {ba}")
@@ -550,7 +553,7 @@ print(f"  reverse():         {ba}")
 
 # 8.4 与 bytes 互转
 subsection("与 bytes 互转")
-ba = bytearray(b'test')
+ba = bytearray(b"test")
 b = bytes(ba)
 print(f"  bytearray -> bytes: {b}")
 ba2 = bytearray(b)

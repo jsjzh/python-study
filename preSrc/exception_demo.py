@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Python 异常处理机制全演示
 涵盖: 常见异常、try/except/else/finally、raise、自定义异常、assert、异常链等
@@ -68,6 +67,7 @@ section("二、try / except 基本用法")
 # 2.1 捕获单个异常
 subsection("捕获单个异常")
 
+
 def divide(a, b):
     return a / b
 
@@ -79,6 +79,7 @@ except ZeroDivisionError:
 
 # 2.2 捕获多个异常 (多个 except 分支)
 subsection("捕获多个异常")
+
 
 def parse_number(text):
     return int(text)
@@ -115,12 +116,12 @@ except Exception as e:
 subsection("获取异常实例 (as 关键字)")
 
 try:
-    d = {'a': 1}
-    val = d['b']
+    d = {"a": 1}
+    val = d["b"]
 except KeyError as e:
-    print(f"  KeyError: {e}")          # 异常值
-    print(f"  args: {e.args}")         # 异常参数元组
-    print(f"  str(e): {str(e)}")      # 字符串表示
+    print(f"  KeyError: {e}")  # 异常值
+    print(f"  args: {e.args}")  # 异常参数元组
+    print(f"  str(e): {e!s}")  # 字符串表示
 
 
 # ================================================================
@@ -129,6 +130,7 @@ except KeyError as e:
 section("三、try / except / else / finally")
 
 subsection("else: 没有异常时执行")
+
 
 def safe_divide(a, b):
     try:
@@ -140,7 +142,7 @@ def safe_divide(a, b):
         print(f"  ✅ 计算成功: {a} / {b} = {result}")
         return result
     finally:
-        print(f"  🔄 finally 块总是会执行")
+        print("  🔄 finally 块总是会执行")
 
 
 safe_divide(10, 2)
@@ -148,21 +150,22 @@ safe_divide(10, 0)
 
 subsection("finally: 无论如何都执行 (常用于资源清理)")
 
+
 def read_file_safe(filename):
     f = None
     try:
-        f = open(filename, 'r', encoding='utf-8')
+        f = open(filename, encoding="utf-8")
         content = f.read()
         print(f"  读取成功: {content[:50]}...")
     except FileNotFoundError:
         print(f"  ❌ 文件不存在: {filename}")
-    except IOError as e:
+    except OSError as e:
         print(f"  ❌ IO 错误: {e}")
     finally:
         if f:
             f.close()
-            print(f"  🔄 文件已关闭")
-        print(f"  🔄 finally 清理完成")
+            print("  🔄 文件已关闭")
+        print("  🔄 finally 清理完成")
 
 
 read_file_safe("temp_exist_demo.txt")
@@ -170,6 +173,7 @@ read_file_safe("temp_not_exist.txt")
 
 # 演示 finally 在任何情况下都会执行
 subsection("finally 在所有情况都会执行")
+
 
 def test_finally(trigger_error):
     print("  进入函数")
@@ -200,6 +204,7 @@ section("四、raise 抛出异常")
 
 subsection("raise 主动抛出异常")
 
+
 def validate_age(age):
     if not isinstance(age, int):
         raise TypeError(f"age 必须是 int 类型， got {type(age).__name__}")
@@ -218,6 +223,7 @@ for age in [25, -5, 200, "abc"]:
 
 subsection("重新抛出异常")
 
+
 def process_data(data):
     try:
         result = data / 0
@@ -232,6 +238,7 @@ except ZeroDivisionError:
     print("  外层也捕获到了")
 
 subsection("raise ... from (异常链)")
+
 
 def read_config():
     try:
@@ -252,7 +259,7 @@ subsection("raise ... from None (禁用异常链)")
 try:
     try:
         int("abc")
-    except ValueError as original:
+    except ValueError:
         raise TypeError("转换失败") from None  # 禁用异常链
 except TypeError as e:
     print(f"  捕获到: {e}")
@@ -267,13 +274,16 @@ section("五、自定义异常类")
 # 5.1 基础自定义异常
 subsection("基础自定义异常")
 
+
 class BusinessError(Exception):
     """业务逻辑错误基类"""
+
     pass
 
 
 class InsufficientBalanceError(BusinessError):
     """余额不足"""
+
     def __init__(self, balance: float, required: float):
         self.balance = balance
         self.required = required
@@ -282,6 +292,7 @@ class InsufficientBalanceError(BusinessError):
 
 class InvalidTransactionError(BusinessError):
     """无效交易"""
+
     pass
 
 
@@ -313,28 +324,34 @@ for bal, amt in transactions:
 # 5.2 异常层级结构
 subsection("异常层级结构")
 
+
 class AppError(Exception):
     """应用错误基类"""
+
     pass
 
 
 class DatabaseError(AppError):
     """数据库错误基类"""
+
     pass
 
 
 class ConnectionError(DatabaseError):
     """连接错误"""
+
     pass
 
 
 class QueryError(DatabaseError):
     """查询错误"""
+
     pass
 
 
 class ValidationError(AppError):
     """验证错误"""
+
     pass
 
 
@@ -357,6 +374,7 @@ section("六、assert 断言")
 
 subsection("基本用法")
 
+
 def calculate_discount(price, discount_rate):
     assert 0 <= discount_rate <= 1, f"折扣率必须在 0~1 之间，当前: {discount_rate}"
     assert price > 0, f"价格必须为正数，当前: {price}"
@@ -371,7 +389,7 @@ except AssertionError as e:
 
 try:
     result = calculate_discount(100, 1.5)
-    print(f"  ❌ 不应该走到这里")
+    print("  ❌ 不应该走到这里")
 except AssertionError as e:
     print(f"  ❌ 断言失败: {e}")
 
@@ -389,7 +407,7 @@ subsection("捕获顺序: 子类在前，父类在后")
 
 try:
     d = {}
-    d[1/0]  # 触发 ZeroDivisionError
+    d[1 / 0]  # 触发 ZeroDivisionError
 except ZeroDivisionError:
     print("  捕获 ZeroDivisionError (子类)")
 except ArithmeticError:
@@ -415,11 +433,14 @@ section("八、异常信息与堆栈追踪")
 
 subsection("获取异常详细信息")
 
+
 def function_a():
     function_b()
 
+
 def function_b():
     function_c()
+
 
 def function_c():
     raise ValueError("最深层的错误")
@@ -439,12 +460,13 @@ subsection("traceback 模块获取堆栈")
 try:
     function_a()
 except ValueError:
-    print(f"  traceback.format_exc():")
+    print("  traceback.format_exc():")
     tb_text = traceback.format_exc()
-    for line in tb_text.split('\n')[:8]:
+    for line in tb_text.split("\n")[:8]:
         print(f"    {line}")
 
 subsection("sys.exc_info() 获取当前异常")
+
 
 def demo_exc_info():
     try:
@@ -454,6 +476,7 @@ def demo_exc_info():
         print(f"  类型: {exc_type}")
         print(f"  值:   {exc_value}")
         print(f"  追踪: {exc_traceback} (对象)")
+
 
 demo_exc_info()
 
@@ -466,6 +489,7 @@ section("九、异常处理最佳实践模式")
 # 9.1 EAFP (Easier to Ask for Forgiveness than Permission)
 subsection("模式 1: EAFP - 先执行，出错再处理")
 
+
 def get_nested_value(d, keys, default=None):
     """安全获取嵌套字典的值"""
     try:
@@ -476,10 +500,11 @@ def get_nested_value(d, keys, default=None):
         return default
 
 
-data = {'user': {'profile': {'age': 25}}}
+data = {"user": {"profile": {"age": 25}}}
 print(f"  存在的键:   {get_nested_value(data, ['user', 'profile', 'age'])}")
 print(f"  不存在的键: {get_nested_value(data, ['user', 'email'])}")
 print(f"  类型错误:   {get_nested_value(data, ['user', 'profile', 'age', 'deep'])}")
+
 
 # 对比 LBYL (Look Before You Leap) - 不推荐
 def get_nested_safe(d, keys, default=None):
@@ -496,9 +521,10 @@ def get_nested_safe(d, keys, default=None):
 # 9.2 使用 with 保证资源释放
 subsection("模式 2: with 语句保证资源释放")
 
+
 def safe_file_operation(filename):
     try:
-        with open(filename, 'w') as f:
+        with open(filename, "w") as f:
             f.write("Hello!")
         return True
     except OSError as e:
@@ -506,15 +532,18 @@ def safe_file_operation(filename):
         return False
     # 不需要 finally, with 已经保证了关闭
 
+
 # 9.3 contextlib.suppress 忽略特定异常
 subsection("模式 3: suppress 忽略特定异常")
 
 from contextlib import suppress
 
+
 def safe_remove(filename):
     """安全删除文件，文件不存在时不报错"""
     with suppress(FileNotFoundError):
         import os
+
         os.remove(filename)
         print(f"  已删除: {filename}")
     print(f"  忽略了 FileNotFoundError: {filename}")
@@ -525,15 +554,18 @@ safe_remove("temp_nonexistent_file_xyz123")
 # 9.4 异常转换 (在边界层转换异常)
 subsection("模式 4: 在边界层转换异常")
 
+
 class APIError(Exception):
     """API 层错误"""
+
     pass
 
 
 def fetch_data(url):
     """获取数据，将底层异常转换为业务异常"""
-    import urllib.request
     import urllib.error
+    import urllib.request
+
     try:
         response = urllib.request.urlopen(url, timeout=1)
         return response.read().decode()
@@ -554,7 +586,7 @@ for i in range(100):
     except ZeroDivisionError:
         continue  # 这是特殊情况，不是"正常流程"
     results.append(val)
-print(f"  反例: 使用异常处理特殊情况 (100 次循环, 跳过除零)")
+print("  反例: 使用异常处理特殊情况 (100 次循环, 跳过除零)")
 
 # 正例: 预先检查
 results = []
@@ -562,7 +594,7 @@ for i in range(100):
     if i == 0:
         continue
     results.append(100 // i)
-print(f"  正例: 预先检查条件 (更高效)")
+print("  正例: 预先检查条件 (更高效)")
 
 
 # ================================================================
@@ -570,8 +602,10 @@ print(f"  正例: 预先检查条件 (更高效)")
 # ================================================================
 section("十、完整异常处理实战: 用户输入验证系统")
 
+
 class InputError(Exception):
     """输入错误"""
+
     pass
 
 
@@ -604,6 +638,7 @@ class ValidationPipeline:
 
     def _validate_format(self, data):
         import math
+
         if math.isnan(data):
             raise InputError("格式错误: 不能是 NaN")
         if math.isinf(data):
@@ -611,7 +646,7 @@ class ValidationPipeline:
 
 
 pipeline = ValidationPipeline()
-test_inputs = [42, -5, 9999, "abc", float('nan'), float('inf'), 3.14]
+test_inputs = [42, -5, 9999, "abc", float("nan"), float("inf"), 3.14]
 for inp in test_inputs:
     pipeline.validate(inp)
 

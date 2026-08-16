@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 oop_demo 主入口 - 汇总演示所有面向对象知识点
 
@@ -6,16 +5,16 @@ oop_demo 主入口 - 汇总演示所有面向对象知识点
 或:      python oop_demo/main.py
 """
 
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from oop_demo.classes_basics import demo as demo_basics
-from oop_demo.methods_demo import demo as demo_methods
-from oop_demo.magic_methods import demo as demo_magic
-from oop_demo.inheritance_demo import demo as demo_inheritance
 from oop_demo.encapsulation_demo import demo as demo_encapsulation
+from oop_demo.inheritance_demo import demo as demo_inheritance
+from oop_demo.magic_methods import demo as demo_magic
+from oop_demo.methods_demo import demo as demo_methods
 
 
 def main():

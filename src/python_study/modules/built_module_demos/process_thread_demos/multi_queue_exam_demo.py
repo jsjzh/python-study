@@ -1,6 +1,7 @@
 from __future__ import annotations
-from dataclasses import dataclass
+
 import multiprocessing
+from dataclasses import dataclass
 from queue import Empty
 
 SENTRY = None
@@ -43,7 +44,7 @@ def main() -> None:
     for process in processes:
         process.start()
 
-    for process in processes:
+    for _ in processes:
         task_q.put(SENTRY)
 
     for process in processes:
@@ -58,9 +59,7 @@ def main() -> None:
         print(f"----- 接收端超时：{exc} -----")
 
     for result in results:
-        print(
-            f"[worker_id {result.worker_id}] deal {result.num} result {result.result}"
-        )
+        print(f"[worker_id {result.worker_id}] deal {result.num} result {result.result}")
 
 
 if __name__ == "__main__":

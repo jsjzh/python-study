@@ -55,7 +55,7 @@ def main() -> None:
     aiohttp_times: list[float] = []
     request_times: list[float] = []
 
-    for i in range(rounds):
+    for _i in range(rounds):
         aiohttp_times.append(time_it(lambda: asyncio.run(aiohttp_list())))
         request_times.append(time_it(lambda: asyncio.run(request_list())))
 
@@ -65,6 +65,4 @@ def main() -> None:
     print(f"----- aiohttp_list median ----- {aiohttp_median:.0f}ms")
     print("----- request_list times -----", request_times)
     print(f"----- request_list median ----- {request_median:.0f}ms")
-    print(
-        f"----- faster ----- {'aiohttp' if aiohttp_median < request_median else 'requests'}"
-    )
+    print(f"----- faster ----- {'aiohttp' if aiohttp_median < request_median else 'requests'}")

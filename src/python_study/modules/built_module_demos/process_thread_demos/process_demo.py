@@ -1,5 +1,4 @@
 import multiprocessing
-import os
 
 count: int = 0
 

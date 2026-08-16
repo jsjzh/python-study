@@ -51,7 +51,7 @@ async def chat_qwen(question: str):
 
     print("----- 正在思考中 -----", question)
 
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession() as session:  # noqa: SIM117
         # print("----- session -----", session)
         async with session.post(url=url, headers=headers, json=payload) as rep:
             # print("----- rep -----", rep)
