@@ -276,7 +276,7 @@ class JsonFormatter(logging.Formatter):
         if record.exc_info is not None:
             log_entry["exception"] = self.formatException(record.exc_info)
 
-        return json.dumps({**log_entry, **record.__dict__}, ensure_ascii=False)
+        return json.dumps(log_entry, ensure_ascii=False)
 
 
 def setup_logging(level: int = logging.DEBUG) -> None:

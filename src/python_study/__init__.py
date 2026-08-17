@@ -14,6 +14,7 @@ from python_study.modules.built_module_demos import (
     process_thread_demos,
     reg_demo,
     serialize_demo,
+    sse_demos,
     urllib_demo,
 )
 from python_study.modules.llm_demos import qwen_demo, sse_demo
@@ -27,6 +28,7 @@ from python_study.modules.third_module_demos import (
 from python_study.utils import setup_logging
 
 setup_logging()
+
 logger = logging.getLogger(__name__)
 
 
@@ -44,7 +46,8 @@ def main() -> None:
     # asyncio_demo.main()
     # asyncio_demos.main()
     # process_thread_demos.main()
-    logging_demos.main()
+    # logging_demos.main()
+    sse_demos.main()
 
     # pillow_demo.main()
     # requests_demo.main()
