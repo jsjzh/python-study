@@ -1,9 +1,12 @@
 import asyncio
 import dataclasses
+import datetime
 import functools
 import json
+import logging
 import os
 import random
+import sys
 import time
 from collections.abc import Callable, Coroutine
 from contextlib import nullcontext
@@ -259,3 +262,27 @@ def cpu_bound(n: int) -> int:
 
 def wrapper_cpu_bound(nums: list[int]) -> list[tuple[int, int]]:
     return list(zip(nums, [cpu_bound(num) for num in nums], strict=True))
+
+
+class JsonFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
+        log_entry: dict[str, str | int | float] = {
+            "timestamp": datetime.datetime.now(datetime.UTC).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+
+        if record.exc_info is not None:
+            log_entry["exception"] = self.formatException(record.exc_info)
+
+        return json.dumps({**log_entry, **record.__dict__}, ensure_ascii=False)
+
+
+def setup_logging(level: int = logging.DEBUG) -> None:
+    root = logging.getLogger()
+    root.setLevel(level)
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(JsonFormatter())
+    root.addHandler(handler)

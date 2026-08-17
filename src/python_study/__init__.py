@@ -1,3 +1,5 @@
+import logging
+
 from python_study.modules.built_module_demos import (
     asyncio_demo,
     asyncio_demos,
@@ -7,6 +9,7 @@ from python_study.modules.built_module_demos import (
     date_time_demo,
     hash_demo,
     itertools_demo,
+    logging_demos,
     process_demo,
     process_thread_demos,
     reg_demo,
@@ -21,6 +24,10 @@ from python_study.modules.third_module_demos import (
     requests_demo,
     sqlite3_demo,
 )
+from python_study.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -36,7 +43,8 @@ def main() -> None:
     # urllib_demo.main()
     # asyncio_demo.main()
     # asyncio_demos.main()
-    process_thread_demos.main()
+    # process_thread_demos.main()
+    logging_demos.main()
 
     # pillow_demo.main()
     # requests_demo.main()
