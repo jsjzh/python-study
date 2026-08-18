@@ -280,9 +280,11 @@ class JsonFormatter(logging.Formatter):
 
 
 def setup_logging(level: int = logging.DEBUG) -> None:
-    root = logging.getLogger()
-    root.setLevel(level)
+    logger = logging.getLogger("python_study")
+    logger.setLevel(level)
 
-    handler = logging.StreamHandler(sys.stdout)
-    handler.setFormatter(JsonFormatter())
-    root.addHandler(handler)
+    if not any(isinstance(h, logging.StreamHandler) for h in logger.handlers):
+        handler = logging.StreamHandler(sys.stdout)
+        handler.setFormatter(JsonFormatter())
+        logger.addHandler(handler)
+    logger.propagate = False
