@@ -5,6 +5,7 @@ import json
 import logging
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
+from typing import Any, Literal
 
 import aiohttp
 from pydantic import BaseModel, ConfigDict, Field
@@ -53,23 +54,57 @@ class SSEEvent:
     id: str | None
 
 
-async def iter_sse(
-    url: str, *, headers: dict[str, str] | None = None, timeout_sec: float = 30.0
+async def aiter_sse(
+    url: str,
+    proxy: str | None = None,
+    method: Literal["GET", "POST"] = "GET",
+    data: dict[str, Any] | None = None,
+    headers: dict[str, str] | None = None,
+    last_event_id: str | None = None,
+    max_retries: int = 3,
 ) -> AsyncIterator[SSEEvent]:
+    timeout = aiohttp.ClientTimeout(connect=5.0, sock_read=60.0, total=300.0)
 
-    timeout = aiohttp.ClientTimeout(total=timeout_sec)
-    async with aiohttp.ClientSession(
-        timeout=timeout, proxy="http://127.0.0.1:7897"
-    ) as session:
-        async with session.get(url, headers=headers) as resp:
-            resp.raise_for_status()
+    merged_headers = {**(headers or {})}
+    if last_event_id is not None:
+        merged_headers["Last-Event-ID"] = last_event_id
 
-            buffer = ""
-            async for chunk in resp.content.iter_any():
-                buffer += chunk.decode("utf-8")
-                while "\n\n" in buffer:
-                    raw_event, buffer = buffer.split("\n\n", 1)
-                    yield _parse_sse_block(raw_event)
+    async with aiohttp.ClientSession(timeout=timeout, proxy=proxy) as session:
+        for current_count in range(1, max_retries + 1):
+            try:
+                async with session.request(
+                    method=method,
+                    url=url,
+                    params=data if method == "GET" else None,
+                    json=data if method == "POST" else None,
+                    headers=merged_headers,
+                ) as resp:
+                    resp.raise_for_status()
+                    buffer = ""
+                    async for chunk in resp.content.iter_any():
+                        buffer += chunk.decode("utf-8")
+                        while "\n\n" in buffer:
+                            raw_event, buffer = buffer.split("\n\n", 1)
+                            yield _parse_sse_block(raw_event)
+            except (
+                aiohttp.ClientConnectionError,
+                aiohttp.ClientResponseError,
+            ) as err:
+                if isinstance(err, aiohttp.ClientConnectionError) or (
+                    500 <= err.status < 600
+                ):
+                    if current_count < max_retries + 1:
+                        wait_time = 0.5 * 2 ** (current_count - 1)
+                        await asyncio.sleep(wait_time)
+                        logger.warning(
+                            "将在 %.1f 秒后进行第 %d 次重试",
+                            wait_time,
+                            current_count,
+                        )
+                        continue
+                    raise err
+                else:
+                    raise err
 
 
 def _parse_sse_block(block: str) -> SSEEvent:
@@ -91,8 +126,10 @@ def _parse_sse_block(block: str) -> SSEEvent:
 async def run() -> None:
     url = "https://stream.wikimedia.org/v2/stream/recentchange"
 
-    async for event in iter_sse(
+    async for event in aiter_sse(
         url,
+        method="GET",
+        proxy="http://127.0.0.1:7897",
         headers={
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         },
