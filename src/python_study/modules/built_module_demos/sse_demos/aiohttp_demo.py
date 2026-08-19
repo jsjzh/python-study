@@ -25,7 +25,7 @@ class Meta(BaseModel):
     offset: int
 
 
-class Root(BaseModel):
+class Data(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     schema_info: str = Field(alias="$schema")
@@ -135,7 +135,7 @@ async def run() -> None:
         },
     ):
         try:
-            payload = Root(**json.loads(event.data))
+            payload = Data(**json.loads(event.data))
 
             logger.info("received title=%s", payload.title)
 
