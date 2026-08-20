@@ -3,48 +3,44 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import os
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from typing import Any, Literal
 
 import aiohttp
-from pydantic import BaseModel, ConfigDict, Field
+from dacite import Config, from_dict
+from dotenv import load_dotenv
+
+load_dotenv()
+
+API_KEY = os.getenv("DEEPSEEK_API_KEY")
+
 
 logger = logging.getLogger(__name__)
 
 
-class Meta(BaseModel):
-    uri: str
-    request_id: str
+@dataclass
+class Delta:
+    role: str | None = None
+    content: str | None = None
+    reasoning_content: str | None = None
+
+
+@dataclass
+class Choice:
+    index: int
+    delta: Delta
+
+
+@dataclass
+class LLMData:
     id: str
-    domain: str
-    stream: str
-    dt: str
-    topic: str
-    partition: int
-    offset: int
-
-
-class Data(BaseModel):
-    model_config = ConfigDict(populate_by_name=True)
-
-    schema_info: str = Field(alias="$schema")
-    meta: Meta
-    id: int | None = None
-    type: str
-    namespace: int
-    title: str
-    title_url: str
-    comment: str
-    timestamp: int
-    user: str
-    bot: bool
-    notify_url: str | None = None
-    server_url: str
-    server_name: str
-    server_script_path: str
-    wiki: str
-    parsedcomment: str
+    object: str
+    created: int
+    model: str
+    system_fingerprint: str
+    choices: list[Choice]
 
 
 @dataclass(frozen=True)
@@ -124,23 +120,50 @@ def _parse_sse_block(block: str) -> SSEEvent:
 
 
 async def run() -> None:
-    url = "https://stream.wikimedia.org/v2/stream/recentchange"
-
-    async for event in aiter_sse(
+    url = "https://api.deepseek.com/chat/completions"
+    data: str = ""
+    async for event in aiter_sse(  # type: ignore
         url,
-        method="GET",
-        proxy="http://127.0.0.1:7897",
+        method="POST",
         headers={
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            "Authorization": f"Bearer {API_KEY}",
+        },
+        data={
+            "model": "deepseek-v4-flash",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "你是一个话很少的助手",
+                },
+                {
+                    "role": "user",
+                    "content": "你是谁",
+                },
+            ],
+            "thinking": {"type": "enabled"},
+            "reasoning_effort": "low",
+            "stream": True,
         },
     ):
         try:
-            payload = Data(**json.loads(event.data))
+            if event.data == "[DONE]":
+                return
 
-            logger.info("received title=%s", payload.title)
+            payload = from_dict(
+                data_class=LLMData,
+                data=json.loads(event.data),
+                config=Config(strict=False),
+            )
+
+            content = payload.choices[0].delta.content
+
+            if content is not None:
+                data += content
 
         except json.JSONDecodeError:
             pass
+
+    print("data", data)
 
 
 def main() -> None:
